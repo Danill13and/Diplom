@@ -2,17 +2,18 @@ const { DataTypes, Sequelize } = require('sequelize')
 
 const sequelize = new Sequelize('diplomdatabase', 'postgres', 'postgres', {
   host: 'localhost',
-  dialect: 'sqlite',
+  dialect: 'postgres',
 })
 
-const Category = sequelize.define("Product",{
+const Category = sequelize.define("Category",{
     name:{
         type:DataTypes.STRING,
-        unique: true
+        unique: true,
+        allowNull: true
     }
 })
 
 sequelize.authenticate()
-sequelize.sync()
+// sequelize.sync()
 
-export default Category
+module.exports = Category

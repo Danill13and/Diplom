@@ -2,7 +2,7 @@ const { DataTypes, Sequelize } = require('sequelize')
 
 const sequelize = new Sequelize('diplomdatabase', 'postgres', 'postgres', {
   host: 'localhost',
-  dialect: 'sqlite',
+  dialect: 'postgres',
 })
 
 const Product = sequelize.define("Product",{
@@ -27,6 +27,6 @@ const Product = sequelize.define("Product",{
 })
 
 sequelize.authenticate()
-sequelize.sync()
+// sequelize.sync()
 
 module.exports = Product
