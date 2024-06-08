@@ -5,6 +5,7 @@ const User = require("./userDB")
 const Basket = require("./basketDB")
 const { v4: uuidv4 } = require('uuid');
 const cors = require('cors')
+const { where } = require('sequelize')
 
 const app = express()
 app.use(express.urlencoded({ extended: true })); 
@@ -36,24 +37,19 @@ app.post('/userLogin', async (req, res) => {
     res.json(user);
 })
 
-app.get('/ProductById', async (req, res) => {
-    const { id } = req.params;
-    const product = await Product.findByPk(id);
-
-    if (!product) {
-        return res.status(404).json({ error: "Product not found" });
-    }
-
-    res.json(product);
+app.get('/getProduct/:id', async (req, res) => {
+    const id  = req.params.id;
+    console.log(id)
+    const product = await Product.findAll({where: {category: id}});
+    res.send(product);
 });
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-app.get('/allProductsOfCategory', async(req, res)=>{
-    const { id } = req.req.params
-    const prods = await Product.findByPk(id)
+app.get('/allProductOfCategory', async(req, res)=>{
+    const categoryID = req.headers["categoryID"] 
+    console.log(categoryID);
+    const prods = await Product.findAll({where: {category: categoryID}})
     res.send(prods)
 })
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 app.post('/createUsers', async(req, res)=>{
     const apikey = uuidv4()
@@ -70,19 +66,18 @@ app.post('/createUsers', async(req, res)=>{
     res.send(newUser)
 })
 
-app.post('/createBasket', async (req, res) => {
-    const api_key = req.headers["api-key"]
-    const basket = Basket.create({apikey: api_key})
-})
-
 app.post("/addToBasket", async (req, res) => {
     const apiKey = req.headers["api-key"]
-
+    const UsersId = await Basket.findOne({apikey: apiKey})
+    const basketOfUsers = await Basket.create({apikey: apiKey})
+    basketOfUsers.update({basket: req.body.basket})
+    res.send(basketOfUsers)
 })
 
 app.get("/basket", async (req, res) => {
     const apiKey = req.headers["api-key"]
-    
+    const basketOfUsers = await Basket.findOne({apikey: apiKey})
+    res.send(basketOfUsers)
 })
 
 app.listen(8000)

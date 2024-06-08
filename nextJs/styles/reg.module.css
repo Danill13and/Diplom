@@ -1,0 +1,66 @@
+
+.main{
+   
+    display: flex;
+    background-image: url('../public/kafe.jpg');
+    max-width: 100%;
+    height: 100%;
+}
+.conteiner{
+    font-family: 'Playfair Display', serif;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+  }
+
+.h{
+    margin: 0%;
+    font-size:50px;
+    text-align: center;
+    width: 90%;
+}
+.separator {
+    width: 95%;
+    border-top: 3px solid black;
+    margin: 0;
+    padding: 10px 0;
+  }
+.form{
+    gap: 2%;
+    border: solid 3px;
+    display: flex;
+    min-width: 22%;
+    min-height:65%;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.input {
+    margin: 0%;
+    font-size: 20px;
+    border-radius: 5px 0px 5px 0px;
+    min-width: 95%;
+    border: 1px solid #000000;
+    min-height: 10%;
+    background-color: #E0E0E0;
+  } 
+.button {
+    margin: 0%;
+    padding: 5px;
+    font-size: 20px;
+    background-color: #E6FF9E;
+    color: rgb(0, 0, 0);
+    border: 1px solid #000000;
+    border-radius: 5px 0px 5px 0px;
+    min-width: 50%;
+    min-height: 6%;
+    cursor: pointer;
+    align-self: center;
+  }

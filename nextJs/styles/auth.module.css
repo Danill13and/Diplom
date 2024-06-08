@@ -1,0 +1,82 @@
+.container {
+    font-family: 'Playfair Display', serif;
+    max-width: 215px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 2px solid #000000;
+    border-radius: 8px;
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    background-color: #FFFFFF;
+  }
+  
+  .h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header {
+    background-color: black;
+    color: white;
+    padding: 5px;
+  }
+  
+  .input {
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    background-color: #BDBDBD;
+    color: #FFFFFF;
+  }  
+
+  .input::placeholder {
+    color: rgb(0, 0, 0); 
+    opacity: 1; 
+  }
+  
+  .button {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #E6FF9E;
+    color: rgb(0, 0, 0);
+    border: 1px solid #000000;
+    border-radius: 4px;
+    cursor: pointer;
+    align-self: center;
+  }
+  
+  .button:hover {
+    background-color: #E6FF9E;
+  }
+
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url('../public/kafe.jpg');
+    height: 100%;
+}
+
+.separator {
+  width: 80%;
+  border-top: 2px solid black;
+  margin: 0;
+  padding: 10px 0;
+}
