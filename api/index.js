@@ -44,11 +44,11 @@ app.get('/getProduct/:id', async (req, res) => {
     res.send(product);
 });
 
-app.get('/allProductOfCategory', async(req, res)=>{
-    const categoryID = req.headers["categoryID"] 
-    console.log(categoryID);
-    const prods = await Product.findAll({where: {category: categoryID}})
-    res.send(prods)
+app.get('/mainProduct/:id', async(req, res)=>{
+    const id = req.params.id; 
+    console.log(id);
+    const prod = await Product.findOne({where: {id: id}})
+    res.send(prod)
 })
 
 app.post('/createUsers', async(req, res)=>{

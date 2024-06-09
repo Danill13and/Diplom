@@ -1,5 +1,6 @@
 import Image from "next/image";
 import styles from "./page.module.css";
+import Auth from "../pages/Auth"
 
 export default function Home() {
   return (
@@ -28,11 +29,12 @@ export default function Home() {
             Меню
           </p>
         </a>
-        <a href="/Reg">
-          <p>
-            Зареєструватись  Авторизуватись
-          </p>
-        </a>
+        <div>
+  <a href="/Reg">Зареєструватись</a>
+  <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+  {/* <span onClick={Auth}>Авторизуватись</span> */}
+  <a onClick={Auth}>Авторизуватись</a>
+</div>
         </div>
       </div>
       <div className={styles.conteiner}>

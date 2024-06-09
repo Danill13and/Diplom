@@ -22,7 +22,7 @@ export default function Auth() {
   }
 
   const handleGet = (e) => {
-    fetch(`${url}/ProductById/:id`, {
+    fetch(`${url}/basket`, {
       method:"GET",
     }) .then(Response =>{
       return Response.json()
@@ -47,24 +47,26 @@ export default function Auth() {
       
 
   };
-  handleGet()
+  // handleGet()
 
   return (
     <main  className={styles.main}>
-      <div className={styles.header}>
-          <h1 >СhatteRidée</h1>
-      </div>
       <div className={styles.container}>
-        <Register/>
-        <form className={styles.form} onSubmit={handleSubmit}>
-            <h1 className={styles.h}>Замовленя</h1>
+
+        <h1 className={styles.h}>Замовленя</h1>
             <div className={styles.basket}>
-                <p> Кошик:</p>
-                <div className={styles.basketList}>
-                    
-                
-                </div>
-            </div>
+            <p> Кошик:</p>
+            {/* {
+        userProds.map((product, index)=>{
+        return(
+            <div key={index} className={styles.prod} >
+                    <h1>{product.name}</h1>
+                    <h1>{product.price}</h1>
+            )
+            })
+        } */}
+              </div>
+        <form className={styles.form} onSubmit={handleSubmit}>
             <input type="text"  placeholder="Адресса замовлення" name = 'adress' value={orderData.adress} onChange={orderForm} className={styles.input} />
             <input type="text"  placeholder="Номер телефону" name = 'phoneNumber' value={orderData.phoneNumber} onChange={orderForm} className={styles.input} />  
             <input type="submit" className={styles.button} value="Замовити"/>

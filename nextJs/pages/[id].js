@@ -4,14 +4,13 @@ import { useState, useEffect } from 'react';
 import styles from '../styles/main.module.css';
 import { useRouter } from "next/router";
 import Image from "next/image";
-
+import { format } from 'react-string-format';
 export default function Main() {
   const url = 'http://localhost:8000'
   const urls = "http://localhost:3000"
 
-  const [prods, setProds] = useState([]);
-  const [cats, setCats] = useState([]);
-  
+  const [products, setProducts] = useState([]);
+
   const router = useRouter()
   const {id} = router.query
 
@@ -23,12 +22,14 @@ export default function Main() {
       return Response.json()
     })
     .then(data=>{
-        setProds(data)
+        setProducts(data)
     })
 
   };
 
-  handleGet()
+  useEffect(() => {
+    handleGet()
+  })
 
   return (
     <main  className={styles.main}>
@@ -62,7 +63,28 @@ export default function Main() {
         </a>
         </div>
       </div>
+      <div className={styles.container}>
+      {
+        products.map((product, index)=>{
       
+        return(
+            <div key={index} className={styles.prods} >
+                <a className={styles.a} href={format("/mainProduct/{0}",product.id)}>
+                    <div className={styles.prod} >
+                    <Image src="/icons8-croissant-96 1.png" alt="Chatte Ridée" width={110} height={110} />
+                      <h1 className={styles.name}>{product.name}</h1>
+                      <div className={styles.separator}></div>
+                      <div className={styles.info} >
+                        <p className={styles.infoT}>{product.price} грн</p>
+                      </div>
+                    </div>
+                </a>
+
+            </div>
+            )
+            })
+        }
+      </div>
     </main>
   );
   

@@ -1,8 +1,35 @@
+"use client"
+
 import React from 'react';
 import Image from 'next/image';
-import styles from '../styles/mainProduct.module.css'; 
+import styles from '../../styles/mainProduct.module.css'; 
+import { useState, useEffect } from 'react';
+import { useRouter } from "next/router";
 
 const MainProduct = () => {
+
+  const url = 'http://localhost:8000'
+
+  const [products, setProduct] = useState([]);
+  const router = useRouter()
+  const {id} = router.query
+
+  const handleGet = (e) => {
+    console.log(id)
+    fetch(`${url}/mainProduct/${id}`, {
+      method:"GET",
+    }) .then(Response =>{
+      return Response.json()
+    })
+    .then(data=>{
+      console.log(data)
+      setProduct(data)
+    })
+
+  };
+
+  useEffect(()=>{if (router.asPath !== router.route) {handleGet()}},[router])
+
   return (
     <>
       <header className={styles.header}>

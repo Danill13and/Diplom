@@ -21,10 +21,14 @@ const Basket = sequelize.define("Basket",{
         allowNull: true
     }
 })
-Basket.hasMany(User, {ondelete: "CASCADE"})
-User.belongsTo(Basket, {ondelete: "CASCADE", through: Basket})
-Basket.hasMany(Product, {ondelete: "CASCADE"})
-Product.belongsTo(Basket, {ondelete: "CASCADE", through: Basket})
+
+User.belongsToMany(Product, { through: Basket, onDelete: "CASCADE", onUpdate: "CASCADE" });
+Product.belongsToMany(User, { through: Basket, onDelete: "CASCADE", onUpdate: "CASCADE" });
+
+// Basket.hasMany(User, {ondelete: "CASCADE"})
+// User.belongsTo(Basket, {ondelete: "CASCADE", through: Basket})
+// Basket.hasMany(Product, {ondelete: "CASCADE"})
+// Product.belongsTo(Basket, {ondelete: "CASCADE", through: Basket})
 
 sequelize.authenticate()
 // sequelize.sync()
