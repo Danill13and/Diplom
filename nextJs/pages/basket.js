@@ -4,12 +4,6 @@ import Image from 'next/image';
 import {Order} from "../pages/Order"
 
 const Basket = () => {
-  const items = [
-    { image: '/photo_2024-05-28_19-08-22.jpg', name: 'Круасан смачний', price: 75 },
-    { image: '/photo_2024-05-28_19-08-22.jpg', name: 'Круасан смачний', price: 75 },
-    { image: '/photo_2024-05-28_19-08-22.jpg', name: 'Круасан смачний', price: 75 },
-    { image: '/photo_2024-05-28_19-08-22.jpg', name: 'Круасан смачний', price: 75 },
-  ];
   const [orderWin, setOrderWin] = useState(false)
 
   const openOrder = ()=>{
