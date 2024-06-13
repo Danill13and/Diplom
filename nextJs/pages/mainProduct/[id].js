@@ -1,34 +1,86 @@
 "use client"
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styles from '../../styles/mainProduct.module.css'; 
-import { useState, useEffect } from 'react';
 import { useRouter } from "next/router";
+import { useCookies } from 'react-cookie';
 
 const MainProduct = () => {
+  const url = 'http://localhost:8000';
+  const [product, setProduct] = useState();
+  const [image, setImage] = useState(' ');
+  const [name, setName] = useState(' ');
+  const [price, setPrice] = useState(' ');
+  const [ingredients, setIngredients] = useState(' ');
+  const [description, setDescription] = useState(' ');
+  const [showAlert, setShowAlert] = useState(false);
+  const [showIngredients, setShowIngredients] = useState(false);
+  const [showDescription, setShowDescription] = useState(false);
+  const router = useRouter();
+  const { id } = router.query;
+  const [cookies, setCookies] = useCookies(['user_token', 'api_key']);
 
-  const url = 'http://localhost:8000'
-
-  const [products, setProduct] = useState([]);
-  const router = useRouter()
-  const {id} = router.query
-
-  const handleGet = (e) => {
-    console.log(id)
+  const handleGet = () => {
+    console.log(id);
     fetch(`${url}/mainProduct/${id}`, {
-      method:"GET",
-    }) .then(Response =>{
-      return Response.json()
+      method: "GET",
     })
-    .then(data=>{
-      console.log(data)
-      setProduct(data)
-    })
-
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      setImage(data.image);
+      setName(data.name);
+      setPrice(data.price);
+      setIngredients(data.ingredients);
+      setDescription(data.description);
+      setProduct(data);
+    });
   };
 
-  useEffect(()=>{if (router.asPath !== router.route) {handleGet()}},[router])
+  const handleAddToBasket = () => {
+    const apiKey = cookies.api_key;
+    const userToken = cookies.user_token;
+
+    fetch(`${url}/addToBasket/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': apiKey,
+        'user_token': userToken
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      setShowAlert(true);
+      setTimeout(() => setShowAlert(false), 3000);
+      console.log(data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  };
+
+  useEffect(() => {
+    if (router.asPath !== router.route) {
+      if (!product) {
+        handleGet();
+      }
+    }
+  }, [router]);
+
+  const truncateText = (text, limit, showMoreHandler) => {
+    if (text.length > limit) {
+      return (
+        <>
+          {text.substring(0, limit)}...
+          <br />
+          <button className={styles.showMoreButton} onClick={showMoreHandler}>↓ Детальніше ↓</button>
+        </>
+      );
+    }
+    return text;
+  };
 
   return (
     <>
@@ -37,15 +89,34 @@ const MainProduct = () => {
       </header>
       <div className={styles.pageContainer}>
         <div className={styles.container}>
-          <h2 className={styles.h2}>Круасани</h2>
-          <Image className={styles.image} src="/photo_2024-05-28_19-08-22.jpg" alt="Фото круасану" width={354} height={256} />
-          <p className={styles.price}>75$</p>
+          <h2 className={styles.h2}>{name}</h2>
+          <Image className={styles.image} src={`../../${image}`} loader={() => `../../${image}`} alt="Фото круасану" width={354} height={256} />
+          <p className={styles.price}>{price} грн.</p>
           <div className={styles.separator}></div>
-          <p className={styles.ingredients}>Борошно, яйця, сухі дріжджі, вершкове масло, вода, молоко, цукор, сіль.</p>
+          <p className={styles.ingredients}>{truncateText(ingredients, 50, () => setShowIngredients(true))}</p>
           <div className={styles.separator}></div> 
-          <p className={styles.description}>Круасани — ніжні вироби з листкового тіста з багатошаровою текстурою та золотистою скоринкою, ідеальні для сніданку або перекусу.</p>
-          
-          <button className={styles.button} onClick={() => alert('Товар добавлен в корзину')}>Додати до Кошику</button>
+          <p className={styles.description}>{truncateText(description, 60, () => setShowDescription(true))}</p>
+          <button className={styles.button} onClick={handleAddToBasket}>Додати до Кошику</button>
+        </div>
+      </div>
+
+      <div className={`${styles.overlay} ${showAlert ? styles.show : ''}`} onClick={() => setShowAlert(false)}>
+        <div className={`${styles.popup} ${showAlert ? styles.show : ''}`}>
+          Товар додано до кошику
+        </div>
+      </div>
+
+      <div className={`${styles.overlay} ${showIngredients ? styles.show : ''}`} onClick={() => setShowIngredients(false)}>
+        <div className={`${styles.popup} ${showIngredients ? styles.show : ''}`}>
+          <h3>Інгредієнти</h3>
+          <p>{ingredients}</p>
+        </div>
+      </div>
+
+      <div className={`${styles.overlay} ${showDescription ? styles.show : ''}`} onClick={() => setShowDescription(false)}>
+        <div className={`${styles.popup} ${showDescription ? styles.show : ''}`}>
+          <h3>Опис</h3>
+          <p>{description}</p>
         </div>
       </div>
     </>

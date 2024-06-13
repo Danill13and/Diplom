@@ -3,8 +3,9 @@
 import React, {useEffect, useState} from "react";
 import ReactDOM from "react-dom";
 import styles from '../styles/reg.module.css';
+import { useCookies } from 'react-cookie'
 
- const Register = ()=> {
+export function Register({ isOpen, onClose }){
   const url = 'http://localhost:8000'
   
   const [regData, setRegData] = useState({
@@ -19,13 +20,14 @@ import styles from '../styles/reg.module.css';
  const [error, setError] = useState('');
  const [showModal, setShowModal] = useState(true);
  const [animate, setAnimate] = useState(false);
+ const [cookies, setCookies] = useCookies(['apiKey'])
 
 
- useEffect(() => {
+ useEffect((isOpen) => {
   setAnimate(true);
-}, []);
+}, [isOpen]);
 
- const handleChange = (e) => {
+ const handleChange = async (e) => {
   
   const inputName = e.target.name
   const inputValue = e.target.value
@@ -45,22 +47,19 @@ import styles from '../styles/reg.module.css';
         'Content-Type': 'application/json'
         }
       })
-      .then(response =>{
-        return response.json()
-      })
       .then(data=>{
-        setError(data.error)
+        console.log(data)
+        setCookies("apiKey", data.apikey)
+        // setError(data.error)
       })
-
-
   }
   const closeModal = () => {
     setAnimate(false);
-    setTimeout(() => setShowModal(false), 300);
+    setTimeout(onClose, 300);
   };
 
   return (
-    <>{showModal && (
+    <>{isOpen && (
       <div className={`${styles.overlay} ${animate ? styles.fadeIn : styles.fadeOut}`} onClick={closeModal}>
         <div className={`${styles.modal} ${animate ? styles.zoomIn : styles.zoomOut}`} onClick={(e) => e.stopPropagation()}>
           <div className={styles.conteiner}>
@@ -74,9 +73,6 @@ import styles from '../styles/reg.module.css';
                 <input type="text"  placeholder="Номер телефону" name="phoneNumber" value={regData.phoneNumber} onChange={handleChange} className={styles.input} />  
                 {error && <div className={styles.error}>{error}</div>}
                 <input type="submit" className={styles.button} value='Зареєструватись'/>
-                <a  href="http://localhost:3000/Auth">
-                  <p>Вже Зареєстровані?</p>
-                </a>
             </form>
         </div>
       </div>

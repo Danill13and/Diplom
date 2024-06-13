@@ -1,8 +1,8 @@
 "use client"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from '../styles/order.module.css';
 import Register from './Reg';
-export default function Auth() {
+export function Order({ isOpen, onClose }) {
   const url = 'http://localhost:8000'
 
   const [orderData, setOrderData] = useState({
@@ -11,7 +11,18 @@ export default function Auth() {
   });
 
   const [userProds, setUserProds] = useState([]);
-  
+  const [showModal, setShowModal] = useState(true);
+  const [animate, setAnimate] = useState(false);
+
+  useEffect((isOpen) => {
+    setAnimate(true);
+  }, [isOpen]);
+
+  const closeModal = () => {
+    setAnimate(false);
+    setTimeout(onClose, 300);
+  };
+
   const orderForm = (e)=>{
     const iName = e.target.name
     const iValue = e.target.value
@@ -33,7 +44,7 @@ export default function Auth() {
 
   };
   const handleSubmit = (e) => {
-    fetch(`${url}/order`, {
+    fetch(`/api/send/`, {
       method:"POST",
       body: JSON.stringify(orderData),
       headers: {
@@ -47,32 +58,23 @@ export default function Auth() {
       
 
   };
-  // handleGet()
+  handleGet()
 
   return (
-    <main  className={styles.main}>
+    <>{isOpen && (
+      <div className={`${styles.overlay} ${animate ? styles.fadeIn : styles.fadeOut}`} onClick={closeModal}>
+        <div className={`${styles.modal} ${animate ? styles.zoomIn : styles.zoomOut}`} onClick={(e) => e.stopPropagation()}>
       <div className={styles.container}>
-
         <h1 className={styles.h}>Замовленя</h1>
-            <div className={styles.basket}>
-            <p> Кошик:</p>
-            {/* {
-        userProds.map((product, index)=>{
-        return(
-            <div key={index} className={styles.prod} >
-                    <h1>{product.name}</h1>
-                    <h1>{product.price}</h1>
-            )
-            })
-        } */}
-              </div>
         <form className={styles.form} onSubmit={handleSubmit}>
             <input type="text"  placeholder="Адресса замовлення" name = 'adress' value={orderData.adress} onChange={orderForm} className={styles.input} />
             <input type="text"  placeholder="Номер телефону" name = 'phoneNumber' value={orderData.phoneNumber} onChange={orderForm} className={styles.input} />  
             <input type="submit" className={styles.button} value="Замовити"/>
         </form>
       </div>
-    </main>
+    </div>
+    </div>
+    )}</>
   );
   
 }

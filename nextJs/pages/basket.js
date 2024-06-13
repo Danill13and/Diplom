@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../styles/basket.module.css';
 import Image from 'next/image';
+import {Order} from "../pages/Order"
 
 const Basket = () => {
   const items = [
@@ -9,6 +10,14 @@ const Basket = () => {
     { image: '/photo_2024-05-28_19-08-22.jpg', name: 'Круасан смачний', price: 75 },
     { image: '/photo_2024-05-28_19-08-22.jpg', name: 'Круасан смачний', price: 75 },
   ];
+  const [orderWin, setOrderWin] = useState(false)
+
+  const openOrder = ()=>{
+    setOrderWin(true)
+  }
+  const closeOrder = ()=>{
+    setOrderWin(false)
+  }
 
   const CartItem = ({ item }) => {
     const [quantity, setQuantity] = useState(1);
@@ -38,6 +47,7 @@ const Basket = () => {
 
   return (
     <>
+    <Order isOpen={orderWin} onClose={closeOrder}/>
       <header className={styles.header}>
         <div className={styles.logo}>
           <Image src="/icons8-croissant-96 1.png" alt="Chatte Ridée" width={50} height={50} />
@@ -65,7 +75,7 @@ const Basket = () => {
               <span>Кількість блюд: {items.length}</span>
               <span>Загальна ціна: {items.reduce((total, item) => total + item.price, 0)}$</span>
             </div>
-            <button className={styles.checkoutButton}>Замовити та сплатити</button>
+            <button onClick={openOrder} className={styles.checkoutButton}>Замовити та сплатити</button>
           </main>
         </div>
       </div>

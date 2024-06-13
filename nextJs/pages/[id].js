@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import styles from '../styles/main.module.css';
 import { useRouter } from "next/router";
 import Image from "next/image";
+import {AuthModal} from "../pages/Auth"
+import {Register} from "../pages/Reg"
 import { format } from 'react-string-format';
 export default function Main() {
   const url = 'http://localhost:8000'
@@ -13,6 +15,23 @@ export default function Main() {
 
   const router = useRouter()
   const {id} = router.query
+  const [isAuthModalOpen, setAuthModalOpen] = useState(false);
+  const [regWin, setRegWin]=useState(false)
+  
+  const openRegWin =()=>{
+    setRegWin(true)
+  }
+  const closeRegWin =()=>{
+    setRegWin(false)
+  }
+  
+  const openAuthModal = () => {
+    setAuthModalOpen(true);
+  };
+
+  const closeAuthModal = () => {
+    setAuthModalOpen(false);
+  };
 
   const handleGet = (e) => {
     console.log(id)
@@ -28,7 +47,9 @@ export default function Main() {
   };
 
   useEffect(() => {
+    
     handleGet()
+    
   })
 
   return (
@@ -56,11 +77,12 @@ export default function Main() {
             Меню
           </p>
         </a>
-        <a href="http://localhost:3000/Reg">
-          <p>
-            Зареєструватись  Авторизуватись
-          </p>
-        </a>
+        <a onClick={openRegWin} className={styles.clickable}>Зареєструватись</a>
+    <Register isOpen={regWin} onClose={closeRegWin} />
+  <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+  <a onClick={openAuthModal} className={styles.clickable}>Авторизуватись</a>
+
+      <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} />
         </div>
       </div>
       <div className={styles.container}>
@@ -71,12 +93,15 @@ export default function Main() {
             <div key={index} className={styles.prods} >
                 <a className={styles.a} href={format("/mainProduct/{0}",product.id)}>
                     <div className={styles.prod} >
-                    <Image src="/icons8-croissant-96 1.png" alt="Chatte Ridée" width={110} height={110} />
-                      <h1 className={styles.name}>{product.name}</h1>
-                      <div className={styles.separator}></div>
+                    <Image src={`${product.image}`} loader={()=>product.image} alt="Chatte Ridée" width={160} height={160} />
                       <div className={styles.info} >
-                        <p className={styles.infoT}>{product.price} грн</p>
+                      <h1  className={styles.name}> {product.name}</h1>
+                      <div className={styles.separator}></div>
+
+                      <p className={styles.infoT}>{product.price} грн</p>
+                      
                       </div>
+                      <input type="submit" className={styles.button} value='Докладніше'/>
                     </div>
                 </a>
 

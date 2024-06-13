@@ -1,6 +1,6 @@
 .container {
   font-family: 'Playfair Display', serif;
-  max-width: 215px;
+  max-width: 235px;
   margin: 0 auto;
   padding: 20px;
   border: 2px solid #000000;
@@ -15,6 +15,7 @@
 .h1 {
   text-align: center;
   margin-bottom: 20px;
+  color: #000000;
 }
 
 .separator {
@@ -53,6 +54,7 @@
   border-radius: 4px;
   cursor: pointer;
   align-self: center;
+  align-items: center;
 }
 
 .button:hover {
@@ -75,7 +77,7 @@
 }
 
 .modal {
-  width: 235px; 
+  width: 275px; 
   padding: 0;
   border: none;
   background: none;

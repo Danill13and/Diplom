@@ -10,14 +10,14 @@ export default function Auth() {
 
   const handleChange = (e) => {
     const inputValue = e.target.value
-    setadress(inputValue)
+    setname(inputValue)
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     fetch("http://localhost:8000/createCategory", {
       method: "POST",
-      body: JSON.stringify(name),
+      body: JSON.stringify({ name }),
       headers: {
         "Content-Type": "application/json"
       }
@@ -31,42 +31,33 @@ export default function Auth() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
-        <Image
-        // src="../public/icon.png"
-        width={50}
-        height={50}
-        alt="Picture of the author"/>
-        <a href="/" className={styles.a}>
-          <h1 className={styles.h1}>
+        <div className={styles.divLogo}>
+          <Image
+            src="/icons8-croissant-96 1.png"
+            width={50}
+            height={50}
+            alt=""/>
+          <a className={styles.logoName} href="/">
             СhatteRidée
-          </h1>
-        </a>
-        <div className={styles.box_in_header}>
-        <a href="/Basket" className={styles.a}>
-          <p>
+          </a>
+        </div>
+        <div className={styles.headerButtons}>
+          <a className={styles.a}  href="/Basket">
             Кошик
-          </p>
-        </a>
-        <a href="/Menu" className={styles.a}>
-          <p>
+          </a>
+          <a className={styles.a}  href="/Category">
             Меню
-          </p>
-        </a>
-        <a href="/Reg" className={styles.a}>
-          <p>
-            Зареєструватись/ Авторизуватись
-          </p>
-        </a>
+          </a>
         </div>
       </div>
       <div className={styles.content}>
         <div className={styles.container}>
           <h1>Створити категорію</h1>
-          <div className={styles.separator}></div> 
-          <form onSubmit={handleSubmit}>
+          <hr className={styles.hr_line}/>
+          <form onSubmit={handleSubmit} className={styles.form}>
             <input type="text" id="firstName" placeholder="Назва категорії:" value={name.name} onChange={handleChange} className={styles.input}/>
+            <button type="submit" className={styles.button}>Створити</button>
           </form>
-          <button type="submit" className={styles.button}>Створити</button>
         </div>
       </div>
     </div>

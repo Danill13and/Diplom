@@ -54,6 +54,9 @@
   align-items: center;
   background-image: url('../public/kafe.jpg');
   background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center; 
+  background-size: cover;
   min-height: calc(100vh - 70px);
   padding: 20px;
 }

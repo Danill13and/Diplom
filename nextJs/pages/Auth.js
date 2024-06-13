@@ -1,23 +1,25 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from 'react';
 import styles from '../styles/auth.module.css';
+import { useCookies } from 'react-cookie'
 
-export default function Auth() {
+export function AuthModal({ isOpen, onClose }) {
   const url = 'http://localhost:8000';
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [showModal, setShowModal] = useState(true);
   const [animate, setAnimate] = useState(false);
+  const [cookies, setCookies] = useCookies(['apiKey'])
 
   useEffect(() => {
-    setAnimate(true);
-  }, []);
+    if (isOpen) {
+      setAnimate(true);
+    }
+  }, [isOpen]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -46,28 +48,24 @@ export default function Auth() {
 
       const user = await response.json();
       setSuccess(`Welcome, ${user.name}!`);
+      setCookies("apiKey", user.apikey)
     } catch (error) {
       setError(error.message);
     }
   };
 
-  const openAuthModal = () => {
-    setShowModal(true);
-    setAnimate(true);
-  };
-
   const closeModal = () => {
     setAnimate(false);
-    setTimeout(() => setShowModal(false), 300);
+    setTimeout(onClose, 300);
   };
 
   return (
     <>
-      {showModal && (
+      {isOpen && (
         <div className={`${styles.overlay} ${animate ? styles.fadeIn : styles.fadeOut}`} onClick={closeModal}>
           <div className={`${styles.modal} ${animate ? styles.zoomIn : styles.zoomOut}`} onClick={(e) => e.stopPropagation()}>
             <div className={styles.container}>
-              <h1>Авторизація <div className={styles.separator}></div></h1>
+              <h1 className ={styles.h1}>Авторизація <div className={styles.separator}></div></h1>
 
               <form onSubmit={handleSubmit}>
                 <input
@@ -94,15 +92,15 @@ export default function Auth() {
                   onChange={(e) => setPassword(e.target.value)}
                   className={styles.input}
                 />
-                <button type="submit" className={styles.button}>Авторизуватись</button>
+              <button type="submit" className={styles.button}>Авторизуватись</button>
               </form>
+              
               {error && <div className={styles.error}>{error}</div>}
               {success && <div className={styles.success}>{success}</div>}
             </div>
           </div>
         </div>
       )}
-
     </>
   );
 }
