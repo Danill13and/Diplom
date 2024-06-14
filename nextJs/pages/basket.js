@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../styles/basket.module.css';
 import Image from 'next/image';
-import {Order} from "../pages/Order"
+import {Order} from "./Order"
 
 const Basket = () => {
   const [orderWin, setOrderWin] = useState(false)
@@ -61,13 +61,6 @@ const Basket = () => {
           <main className={styles.main}>
             <h1 className={styles.title}>Ваш кошик</h1>
             <div className={styles.cart}>
-              {items.map((item, index) => (
-                <CartItem key={index} item={item} />
-              ))}
-            </div>
-            <div className={styles.summary}>
-              <span>Кількість блюд: {items.length}</span>
-              <span>Загальна ціна: {items.reduce((total, item) => total + item.price, 0)}$</span>
             </div>
             <button onClick={openOrder} className={styles.checkoutButton}>Замовити та сплатити</button>
           </main>

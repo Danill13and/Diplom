@@ -108,10 +108,10 @@ app.post("/addToBasket/:id", async (req, res) => {
 
 app.get("/basket", async (req, res) => {
     const apiKey = req.headers["api-key"]
-    if(apiKey){
-    const user = await User.findOne({apikey: apiKey})
-    const basketOfUsers = await Basket.findAll({where: {userID: `${user.id}`}})
-    res.send(basketOfUsers)
+    if(apiKey && apiKey !== undefined && apiKey !== "undefined"){
+        const user = await User.findOne({apikey: apiKey})
+        const basketOfUsers = await Basket.findAll({where: {userID: `${user.id}`}})
+        res.send(basketOfUsers)
     }else{
         const userToken = req.headers["user_token"]
         const basketOfUsers = await Basket.findAll({where: {user_token: `${userToken}`}})
@@ -157,6 +157,20 @@ app.get("/getUser", async (req, res) => {
     const user = req.headers["api-key"]
     const getUser = await User.findOne({where: {apikey: `${user}`}})
     res.send(getUser)
+})
+
+app.get("/getProductFromBasket", async (req, res) => {
+    const apiKey = req.headers["api-key"]
+    if(apiKey && apiKey !== undefined && apiKey !== "undefined"){
+        const user = await User.findOne({apikey: apiKey})
+        const basketOfUsers = await Basket.findAll({where: {userID: `${user.id}`}})
+        const product = await Product.findOne({where: {id: basketOfUsers}})
+        res.send(basketOfUsers)
+    }else{
+        const userToken = req.headers["user_token"]
+        const basketOfUsers = await Basket.findAll({where: {user_token: `${userToken}`}})
+        
+    }
 })
 
 app.listen(8000)

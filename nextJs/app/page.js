@@ -55,7 +55,7 @@ export default function Home() {
           <div className={styles.headerButtons}>
             <Register isOpen={regWin} onClose={closeRegWin} />
             <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} />
-            <a className={styles.a}  href="/Basket">
+            <a className={styles.a}  href="/basket">
               Кошик
             </a>
             <a className={styles.a}  href="/Category">

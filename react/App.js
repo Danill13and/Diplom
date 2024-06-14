@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View , TextInput, Button, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View , TextInput, Image, TouchableOpacity } from 'react-native';
 import { Link, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,15 +20,47 @@ export default function App() {
 }
 
 function Register({ navigation }){
+  const url = 'http://localhost:8000'
+  
+  const [error, setError] = useState('');
+  const [name, setName] = useState('')
+  const [password, setPassword] = useState('')
+  const [rePassword, setRePassword] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [lastName, setLastName] = useState('')
+
+
+  const regData= {"name": name, "password": password, "lastName":lastName, "phoneNumber":phoneNumber}
+
+
+  function regUser() {
+    fetch(`${url}/createUsers`,{
+      method:"POST",
+      body: JSON.stringify(regData),
+      headers: {
+        'Content-Type': 'application/json'
+        }
+      })
+      .then(data=>{
+        console.log(data)
+      })
+  }
+
   return (
+    <View style={registerStyles.main}>
     <View style={registerStyles.container}>
-      <Text>Реєстрація</Text>
-      <TextInput style={registerStyles.inp} placeholder='Ім`я' />
-      <TextInput style={registerStyles.inp} placeholder='Прізвище' />
-      <TextInput style={registerStyles.inp} placeholder='Пароль'/>
-      <TextInput style={registerStyles.inp} placeholder='Повторіть пароль'/>
-      <TextInput style={registerStyles.inp} placeholder='Номер телефону'/>
-      <Button variant="contained">Зареєструватись</Button>
+      <Text style={registerStyles.h}>Реєстрація</Text>
+      <TextInput style={registerStyles.inp} value={name} onChange={(e) => {setName(e.target.value)}} placeholder='Ім`я' />
+      <TextInput style={registerStyles.inp} value={lastName} onChange={(e) => {setLastName(e.target.value)}}  placeholder='Прізвище' />
+      <TextInput style={registerStyles.inp} value={password} onChange={(e) => {setPassword(e.target.value)}} placeholder='Пароль'/>
+      <TextInput style={registerStyles.inp} value={rePassword}  onChange={(e) => {setRePassword(e.target.value)}} placeholder='Повторіть пароль'/>
+      <TextInput style={registerStyles.inp} value={phoneNumber} onChange={(e) => {setPhoneNumber(e.target.value)}} placeholder='Номер телефону'/>
+      <TouchableOpacity style={registerStyles.button} onPress={regUser} variant="contained">
+        <View>
+        Зареєструватись
+        </View>
+      </TouchableOpacity>
+    </View>
     </View>
   );
 }
@@ -117,14 +149,44 @@ function Category({ navigation }){
 }
 
 function Menu({ route, navigation }){
+
+  const [products, setProduct] = useState([])
+
+  const id = route.params.category.id
+
+  const allProduct = async () =>{
+    await fetch(`http://localhost:8000/getProduct/${id}`,{
+      method: 'GET',
+      headers: { 
+        "Content-Type": "application/json",
+      },
+    })
+    .catch(error => {
+      console.error(error);
+      console.log(error);
+    })
+    .then(response => {
+      return response.json()
+    })
+    .then(data => {
+      setProduct(data)
+    })
+  }
+
+  allProduct()
+
   return (
     <View style={menuStyles.container}>
       {
       route.params &&(
         <View>
-          <Text>
-            {route.params.category.name}
-          </Text>
+          {products.map((product) => (
+        <TouchableOpacity >
+          <Image source={{ uri: `${product.image}`}} style={{ width: 100, height: 100 }} />
+          <Text style={categoryStyles.productText}>{product.name}</Text>
+          <Text style={categoryStyles.productText}>{product.price}</Text>
+        </TouchableOpacity>
+      ))}
         </View>
       )}
     </View>
@@ -132,23 +194,46 @@ function Menu({ route, navigation }){
 }
 
 const registerStyles = StyleSheet.create({
-  container: {
+  main: {
     flex: 1,
     alignItems: 'center',
     gap: 20 ,
     justifyContent: 'center',
   },
-  inp:{
-    width:"60%",
+  container:{
+
+    backgroundColor:"#FFFFFF",
     borderRadius:10,
-    borderBlockColor:"black",
-    height:"6%"
+    alignItems: 'center',
+    gap: 20 ,
+    width:"30%",
+    minHeight:"80%",
+    justifyContent: 'center',
   },
-  butt:{
-    width:"50%",
+  inp:{
+    paddingLeft:10,
+    width:"80%",
     borderRadius:10,
     borderBlockColor:"black",
+    height:"8%",
+    backgroundColor:'#BDBDBD',
+    fontSize:20
+  }
+  , button: {
     height:"6%",
+    fontSize:25,
+    backgroundColor: '#E6FF9E',
+    borderRadius: 10, 
+    padding: 10,
+    marginBottom: 10,
+    width: '50%',
+    justifyContent:"center",
+    alignItems:'center',
+
+  }
+  ,h:{
+    fontSize:30,
+    borderBottomWidth:2,
   }
 });
 

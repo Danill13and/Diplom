@@ -21,15 +21,17 @@ export default function Category() {
       return Response.json()
     })
     .then(data=>{
-        setCategory(data)
+      setCategory(data)
     })
 
   };
-  useEffect(() => {
-   
-      handleGet()
   
+  useEffect(() => {
+    
+    handleGet()
+    
   })
+
   if(!cookies.apiKey){
     return (
       <main className={styles.main}>
@@ -45,7 +47,7 @@ export default function Category() {
             </a>
           </div>
           <div className={styles.headerButtons}>
-            <a className={styles.a}  href="/Basket">
+            <a className={styles.a}  href="/basket">
               Кошик
             </a>
             <a className={styles.a}  href="/Category">
