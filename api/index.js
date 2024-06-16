@@ -83,10 +83,10 @@ app.post("/addToBasket/:id", async (req, res) => {
     const apiKey = req.headers["api-key"]
     const product = req.params.id
     if(apiKey && apiKey !== undefined && apiKey !== "undefined"){
-        const UsersID = await User.findOne({apikey: apiKey})
+        const UsersID = await User.findOne({where: {apikey: apiKey}})
         const allBasket = await Basket.findOne({where: {userID: `${UsersID.id}`, productID: `${product}`}})
         if(!allBasket){
-            const basketOfUsers = await Basket.create({userID: UsersID.id, productID: product})
+            const basketOfUsers = await Basket.create({userID: `${UsersID.id}`, productID: product})
             res.send(basketOfUsers)
         }else{
             allBasket.update({count: allBasket.count + 1})
@@ -107,15 +107,53 @@ app.post("/addToBasket/:id", async (req, res) => {
 })
 
 app.get("/basket", async (req, res) => {
-    const apiKey = req.headers["api-key"]
-    if(apiKey && apiKey !== undefined && apiKey !== "undefined"){
-        const user = await User.findOne({apikey: apiKey})
-        const basketOfUsers = await Basket.findAll({where: {userID: `${user.id}`}})
-        res.send(basketOfUsers)
-    }else{
-        const userToken = req.headers["user_token"]
-        const basketOfUsers = await Basket.findAll({where: {user_token: `${userToken}`}})
-        res.send(basketOfUsers)
+    try {
+        const apiKey = req.headers["api-key"];
+        let basketItems;
+        let products = [];
+        let basket = [];
+
+        if (apiKey && apiKey !== "undefined") {
+            // Проверка наличия и валидности apiKey
+            const user = await User.findOne({ where: { apikey: apiKey } });
+
+            if (!user) {
+                return res.status(404).json({ error: "Пользователь не найден" });
+            }
+
+            // Поиск товаров в корзине по userID
+            basketItems = await Basket.findAll({ where: { userID: user.id } });
+
+        } else {
+            const userToken = req.headers["user_token"];
+
+            if (!userToken || userToken === "undefined") {
+                return res.status(400).json({ error: "Отсутствует пользовательский токен" });
+            }
+
+            // Поиск товаров в корзине по user_token
+            basketItems = await Basket.findAll({ where: { user_token: userToken } });
+        }
+
+        // Проверка наличия товаров в корзине
+        if (!basketItems || basketItems.length === 0) {
+            return res.status(404).json({ error: "Корзина пользователя пуста" });
+        }
+
+        // Получение всех товаров в корзине
+        for (const item of basketItems) {
+            
+            const product = await Product.findOne({ where: { id: item.productID } });
+            if (product) {
+                products.push(product);
+                basket.push(item)
+            }
+        }
+
+        res.json({prod: products, basket: basket});
+    } catch (error) {
+        console.error("Ошибка при получении товаров из корзины:", error);
+        res.status(500).json({ error: "Внутренняя ошибка сервера" });
     }
 })
 
@@ -127,29 +165,55 @@ app.delete("/deleteBasket", async (req, res) => {
 
 app.post("/productPlus", async (req, res) => {
     const product = req.body.id
+    console.log(product)
     const apiKey = req.headers["api-key"]
-    const UsersID = await User.findOne({apikey: apiKey})
-    const productPlus = await Basket.findOne({where: {userID: `${UsersID.id}`, productID: `${product}`}})
-    if(productPlus.count <= 9){
-        console.log(productPlus.count)
-        productPlus.update({count: productPlus.count + 1})
-        res.send(productPlus)
+    if (apiKey && apiKey !== "undefined") {
+        const UsersID = await User.findOne({apikey: apiKey})
+        const productPlus = await Basket.findOne({where: {id: product}})
+        console.log(productPlus)
+        if(productPlus.count <= 9){
+            console.log(productPlus.count)
+            productPlus.update({count: productPlus.count + 1})
+            res.send(productPlus)
+        }else{
+            res.send("Ай яй яй)")
+        }
     }else{
-        res.send("Ай яй яй)")
+        const userToken = req.headers["user_token"]
+        const productPlus = await Basket.findOne({where: {user_token: userToken }})
+        if(productPlus.count <= 9){
+            console.log(productPlus.count)
+            productPlus.update({count: productPlus.count + 1})
+            res.send(productPlus)
+        }else{
+            res.send("Ай яй яй)")
+        }
     }
 })
 
 app.post("/productMinus", async (req, res) => {
     const product = req.body.id
     const apiKey = req.headers["api-key"]
-    const UsersID = await User.findOne({apikey: apiKey})
-    const productPlus = await Basket.findOne({where: {userID: `${UsersID.id}`, productID: `${product}`}})
-    if(productPlus.count > 1){
-        console.log(productPlus.count)
-        productPlus.update({count: productPlus.count - 1})
-        res.send(productPlus)
+    if (apiKey && apiKey !== "undefined") {
+        const UsersID = await User.findOne({apikey: apiKey})
+        const productMinus = await Basket.findOne({where: {id: product}})
+        if(productMinus.count > 1){
+            console.log(productMinus.count)
+            productMinus.update({count: productMinus.count - 1})
+            res.send(productMinus)
+        }else{
+            res.send("Ай яй яй)")
+        }
     }else{
-        res.send("Ай яй яй)")
+        const userToken = req.headers["user_token"]
+        const productMinus = await Basket.findOne({where: {user_token: userToken }})
+        if(productMinus.count > 1){
+            console.log(productMinus.count)
+            productMinus.update({count: productMinus.count - 1})
+            res.send(productMinus)
+        }else{
+            res.send("Ай яй яй)")
+        }
     }
 })
 
@@ -160,17 +224,49 @@ app.get("/getUser", async (req, res) => {
 })
 
 app.get("/getProductFromBasket", async (req, res) => {
-    const apiKey = req.headers["api-key"]
-    if(apiKey && apiKey !== undefined && apiKey !== "undefined"){
-        const user = await User.findOne({apikey: apiKey})
-        const basketOfUsers = await Basket.findAll({where: {userID: `${user.id}`}})
-        const product = await Product.findOne({where: {id: basketOfUsers}})
-        res.send(basketOfUsers)
-    }else{
-        const userToken = req.headers["user_token"]
-        const basketOfUsers = await Basket.findAll({where: {user_token: `${userToken}`}})
-        
+    try {
+        const apiKey = req.headers["api-key"];
+        let products = [];
+        let basketItems
+        let basket = [];
+        let users = [];
+
+        if (apiKey && apiKey !== "undefined") {
+            // Проверка наличия и валидности apiKey
+            const user = await User.findOne({ where: { apikey: apiKey } });
+            if (!user) {
+                return res.status(404).json({ error: "Пользователь не найден" });
+            }
+            users.push(user)
+            // Поиск товаров в корзине по userID
+            basketItems = await Basket.findAll({ where: { userID: `${user.id}` } });
+        } else {
+            const userToken = req.headers["user_token"];
+
+            // Поиск товаров в корзине по user_token
+            basketItems = await Basket.findAll({ where: { user_token: userToken } });
+        }
+
+        // Проверка наличия товаров в корзине
+        if (!basketItems || basketItems.length === 0) {
+            return res.status(404).json({ error: "Корзина пользователя пуста" });
+        }
+
+        // Получение всех товаров в корзине
+        for (const item of basketItems) {
+            
+            const product = await Product.findOne({ where: { id: item.productID } });
+            if (product) {
+                products.push(product);
+                basket.push(item)
+            }
+        }
+
+        res.json({prod: products, basket: basket, user: users});
+    } catch (error) {
+        console.error("Ошибка при получении товаров из корзины:", error);
+        res.status(500).json({ error: "Внутренняя ошибка сервера" });
     }
-})
+});
 
 app.listen(8000)

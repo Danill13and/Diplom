@@ -11,6 +11,8 @@ import {Register} from "../pages/Reg"
 export default function Category() {
   const url = 'http://localhost:8000'
 
+  const [isAuthModalOpen, setAuthModalOpen] = useState(false);
+  const [regWin, setRegWin]=useState(false)
   const [categorys, setCategory] = useState([]);
   const [cookies, setCookies] = useCookies(['user_token'])
   
@@ -26,6 +28,21 @@ export default function Category() {
 
   };
   
+  const openRegWin =()=>{
+    setRegWin(true)
+  }
+  const closeRegWin =()=>{
+    setRegWin(false)
+  }
+
+  const openAuthModal = () => {
+    setAuthModalOpen(true);
+  };
+
+  const closeAuthModal = () => {
+    setAuthModalOpen(false);
+  };
+
   useEffect(() => {
     
     handleGet()
@@ -54,12 +71,11 @@ export default function Category() {
               Меню
             </a>
             
-            {/* <a onClick={openRegWin} className={styles.a}>Зареєструватись</a>
+            <a onClick={openRegWin} className={styles.a}>Зареєструватись</a>
             <Register isOpen={regWin} onClose={closeRegWin} />
             <a onClick={openAuthModal} className={styles.a}>Авторизуватись</a>
-            <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} /> */}
-          {/* <div>
-          </div> */}
+            <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} />
+
           </div>
         </div>
         <div>
