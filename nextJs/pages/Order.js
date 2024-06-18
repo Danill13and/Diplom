@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react';
 import styles from '../styles/order.module.css';
 import Register from './Reg';
 import { useCookies } from 'react-cookie'
+import Router from "next/router";
 export function Order({ isOpen, onClose }) {
   const url = 'http://localhost:8000'
 
-  const [cookies, setCookies] = useCookies(['user_token'])
+  const [cookies, setCookies] = useCookies(['code'])
   const apiKey = cookies.apiKey;
   const userToken = cookies.user_token;
+  const code = cookies.code
   // const [orderData, setOrderData] = useState({
   //   adress:'',
   //   phoneNumber:'',
@@ -33,7 +35,8 @@ export function Order({ isOpen, onClose }) {
   const [userProds, setUserProds] = useState([]);
   const [userBasket, setUserbasket] = useState([]);
   const [user, setUser] = useState([]);
-
+  const [totalPrice, setTotalPrice] = useState(0)
+  const [orderPayload, setOrderPayload] = useState({});
   const orderForm = (e)=>{
     const iName = e.target.name
     const iValue = e.target.value
@@ -42,6 +45,19 @@ export function Order({ isOpen, onClose }) {
       [iName] : iValue
     }))
   }
+
+  function removePercentageSign(input) {
+    return input.replace(/%/g, '');
+}
+
+  const calculateTotalPrice = (products, baskets) => {
+    let total = 0;
+    products.forEach((product, index) => {
+      const basket = baskets[index];
+      total += product.price * basket.count;
+    });
+    setTotalPrice(total);
+  };
 
   const handleGet = async () => {
     try {
@@ -63,6 +79,83 @@ export function Order({ isOpen, onClose }) {
       setUserProds(data.prod);
       setUserbasket(data.basket)
       setUser(data.user)
+      calculateTotalPrice(data.prod, data.basket)
+      await fetch(`http://localhost:8000/getOrders`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "invoice-id": cookies.code
+        }
+      }).then(Response => {
+        return Response.json()
+      }).then(async (data)=>{
+        if(orderPayload === null || orderPayload == {} || orderPayload == { }){
+          setOrderPayload(data.orderData, userProds, userBasket, user)
+          console.log(orderPayload)
+          await fetch(`http://localhost:8000/checkOrder`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            }
+          }).then(Response => {
+            return Response.json()
+          }).then(data => {
+            // console.log(JSON.stringify(data))
+            if(data.status === 'success'){
+              try {
+                  const response = fetch('/api/send/', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(orderPayload)
+                  });
+            
+                  if (!response.ok) {
+                    throw new Error('Ошибка при отправке данных');
+                  }
+            
+                  const result = response.json();
+                  console.log('Ответ сервера:', result);
+                } catch (error) {
+                  console.error('Ошибка при отправке данных:', error);
+                }
+            }
+          })
+        }else{
+          await fetch(`http://localhost:8000/checkOrder`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            }
+          }).then(Response => {
+            return Response.json()
+          }).then(data => {
+            console.log(orderPayload)
+            // console.log(JSON.stringify(data))
+            if(data.status === 'success'){
+              try {
+                  const response = fetch('/api/send/', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(orderPayload)
+                  });
+            
+                  if (!response.ok) {
+                    throw new Error('Ошибка при отправке данных');
+                  }
+            
+                  const result = response.json();
+                  console.log('Ответ сервера:', result);
+                } catch (error) {
+                  console.error('Ошибка при отправке данных:', error);
+                }
+            }
+          })
+        }
+      })
     } catch (error) {
       console.error('Ошибка при получении данных:', error);
     }
@@ -71,61 +164,121 @@ export function Order({ isOpen, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const orderPayload = {
-      orderData,
-      userProds,
-      userBasket,
-      user
-    };
+    setOrderPayload(orderData, userProds, userBasket, user)
     
-    try {
-      const response = await fetch('/api/send/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(orderPayload)
-      });
-
-      if (!response.ok) {
-        throw new Error('Ошибка при отправке данных');
-      }
-
-      const result = await response.json();
-      console.log('Ответ сервера:', result);
-    } catch (error) {
-      console.error('Ошибка при отправке данных:', error);
-    }
+    fetch(`${url}/order`,{
+      method:"POST",
+      body: JSON.stringify({totalPrice: totalPrice, orderData: orderData}),
+      headers: {
+        'Content-Type': 'application/json'
+        }
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .then(data=>{
+        setCookies('code', JSON.stringify(data.invoiceId))
+        Router.push(data.pageUrl)
+      })
   };
 
+  // const monoBank = async () => {
+  //   console.log(cookies.code)
+  //   await fetch(`http://localhost:8000/getOrders`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "invoice-id": cookies.code
+  //     }
+  //   }).then(Response => {
+  //     return Response.json()
+  //   }).then(async (data)=>{
+  //     if(orderPayload === null || orderPayload == {} || orderPayload == { }){
+  //       setOrderPayload(data.orderData, userProds, userBasket, user)
+
+  //       await fetch(`http://localhost:8000/checkOrder`, {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         }
+  //       }).then(Response => {
+  //         return Response.json()
+  //       }).then(data => {
+  //         console,log(orderPayload)
+  //         // console.log(JSON.stringify(data))
+  //         if(data.status === 'success'){
+  //           try {
+  //               const response = fetch('/api/send/', {
+  //                 method: 'POST',
+  //                 headers: {
+  //                   'Content-Type': 'application/json'
+  //                 },
+  //                 body: JSON.stringify(orderPayload)
+  //               });
+          
+  //               if (!response.ok) {
+  //                 throw new Error('Ошибка при отправке данных');
+  //               }
+          
+  //               const result = response.json();
+  //               console.log('Ответ сервера:', result);
+  //             } catch (error) {
+  //               console.error('Ошибка при отправке данных:', error);
+  //             }
+  //         }
+  //       })
+  //     }else{
+  //       await fetch(`http://localhost:8000/checkOrder`, {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         }
+  //       }).then(Response => {
+  //         return Response.json()
+  //       }).then(data => {
+  //         console.log(orderPayload)
+  //         // console.log(JSON.stringify(data))
+  //         if(data.status === 'success'){
+  //           try {
+  //               const response = fetch('/api/send/', {
+  //                 method: 'POST',
+  //                 headers: {
+  //                   'Content-Type': 'application/json'
+  //                 },
+  //                 body: JSON.stringify(orderPayload)
+  //               });
+          
+  //               if (!response.ok) {
+  //                 throw new Error('Ошибка при отправке данных');
+  //               }
+          
+  //               const result = response.json();
+  //               console.log('Ответ сервера:', result);
+  //             } catch (error) {
+  //               console.error('Ошибка при отправке данных:', error);
+  //             }
+  //         }
+  //       })
+  //     }
+  //   })
+  // };
+
   const handleSubmitt = async (e) => {
+    
     e.preventDefault();
 
-    const orderPayload = {
-      orderData,
-      userProds,
-      userBasket
-    };
-    
-    try {
-      const response = await fetch('/api/send/', {
-        method: 'POST',
-        
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(orderPayload)
-      });
+    setOrderPayload(orderData, userProds, userBasket)
 
-      if (!response.ok) {
-        throw new Error('Ошибка при отправке данных');
-      }
-
-      const result = await response.json();
-      console.log('Ответ сервера:', result);
-    } catch (error) {
-      console.error('Ошибка при отправке данных:', error);
-    }
+    fetch(`${url}/order`,{
+      method:"POST",
+      body: JSON.stringify({totalPrice: totalPrice}),
+      headers: {
+        'Content-Type': 'application/json'
+        }
+      })
+      .then(data=>{
+        setCookies('code', JSON.stringify(data.invoiceId))
+      })
   };
 
   useEffect(() => {

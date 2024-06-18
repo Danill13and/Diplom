@@ -1,9 +1,10 @@
-import { Telegraf } from "telegraf"
+const { Telegraf } = require('telegraf')
+
+
 
 const bot = new Telegraf("7074928480:AAH0v0HuCHmLv9d3R292U4w22kVmGLShmyI")
 
 function send(address) {
-    console.log(address);
     const { orderData, userProds, userBasket, user } = address;
 
     let message = `*НОВЕ ЗАМОВЛЕННЯ!!!*\n\n*Користувач:*\n`;
@@ -18,10 +19,10 @@ function send(address) {
     for (let i = 0; i < userProds.length; i++) {
         const product = userProds[i];
         const basket = userBasket[i];
-        message += `\nНазва: ${product.name}\nЦіна: ${product.price} UAH\nКількість: ${basket.count}\n`;
+        message += `\nНазва: ${product.name}\nЦіна: ${product.price} UAH\nКількість: ${basket.count} шт.\n`;
         totalPrice += basket.count * product.price;
     }
-    message += `\nЗагальна вартість: ${totalPrice}`;
+    message += `\nЗагальна вартість: ${totalPrice} UAH`;
 
     bot.telegram.sendMessage(-4260426752, message, { parse_mode: 'Markdown' });
 }

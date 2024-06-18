@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View , TextInput, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, Image, TouchableOpacity, Button, Modal } from 'react-native';
 import { Link, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 
 const Stack = createNativeStackNavigator()
 export default function App() {
@@ -17,6 +17,7 @@ export default function App() {
         <Stack.Screen name = 'order' component = {Order} />
         <Stack.Screen name = 'mainOfProduct' component = {MainOfProduct} />
         <Stack.Screen name = 'auth' component = {Auth} />
+        <Stack.Screen name = 'basket' component = {Basket} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -44,9 +45,14 @@ function Register({ navigation }){
         'Content-Type': 'application/json'
         }
       })
+    .then(Response => {
+      return Response.json()
+    })
       .then(data=>{
-        console.log(data)
+        AsyncStorage.setItem('apiKey', data.apikey);
+        navigation.navigate('main');
       })
+
   }
 
   return (
@@ -60,7 +66,7 @@ function Register({ navigation }){
       <TextInput style={registerStyles.inp} value={phoneNumber} onChange={(e) => {setPhoneNumber(e.target.value)}} placeholder='Номер телефону'/>
       <TouchableOpacity style={registerStyles.button} onPress={regUser} variant="contained">
         <View>
-        Зареєструватись
+        <Text>Зареєструватись</Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -102,8 +108,9 @@ export function Auth({ navigation }) {
 
       const user = await response.json();
       setSuccess(`Welcome, ${user.name}!`);
+      console.log(user.apikey)
       await AsyncStorage.setItem('apiKey', user.apikey);
-      navigation.navigate('Main');
+      navigation.navigate('main');
     } catch (error) {
       setError(error.message);
     }
@@ -139,6 +146,128 @@ export function Auth({ navigation }) {
     </View>
   );
 }
+
+const Basket = ({ navigation }) => {
+  const [orderWin, setOrderWin] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [baskets, setBaskets] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  const getTokens = async () => {
+    try {
+      const apiKey = await AsyncStorage.getItem('apiKey');
+      const userToken = await AsyncStorage.getItem('user_token');
+      return { apiKey, userToken };
+    } catch (error) {
+      console.error('Error fetching tokens from AsyncStorage:', error);
+      return { apiKey: null, userToken: null };
+    }
+  };
+
+  const openOrder = () => setOrderWin(true);
+  const closeOrder = () => setOrderWin(false);
+
+  const handleGet = async () => {
+    try {
+      const { apiKey, userToken } = await getTokens();
+      const response = await fetch(`http://localhost:8000/getProductFromBasket`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': apiKey,
+          'user_token': userToken,
+        },
+      });
+      const data = await response.json();
+      setProducts(data.prod);
+      setBaskets(data.basket);
+      calculateTotalPrice(data.prod, data.basket);
+    } catch (error) {
+      console.error('Error fetching basket:', error);
+    }
+  };
+
+  const handlePlus = async (id) => {
+    try {
+      const { apiKey, userToken } = await getTokens();
+      await fetch(`http://localhost:8000/productPlus`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': apiKey,
+          'user_token': userToken,
+        },
+        body: JSON.stringify({ id }),
+      });
+      handleGet();
+    } catch (error) {
+      console.error('Error increasing product count:', error);
+    }
+  };
+
+  const handleMinus = async (id) => {
+    try {
+      const { apiKey, userToken } = await getTokens();
+      await fetch(`http://localhost:8000/productMinus`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': apiKey,
+          'user_token': userToken,
+        },
+        body: JSON.stringify({ id }),
+      });
+      handleGet();
+    } catch (error) {
+      console.error('Error decreasing product count:', error);
+    }
+  };
+
+  const calculateTotalPrice = (products, baskets) => {
+    let total = 0;
+    products.forEach((product, index) => {
+      const basket = baskets[index];
+      total += product.price * basket.count;
+    });
+    setTotalPrice(total);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await handleGet();
+    };
+    fetchData();
+  }, []);
+
+  return (
+    <View style={{ flex: 1 }}>
+      <ScrollView>
+        <Text>Ваш кошик</Text>
+        <View>
+          {products.map((product, index) => {
+            const basket = baskets[index];
+            return (
+              <View key={product.id} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text>{product.name}</Text>
+                <Text>{product.price} UAH</Text>
+                <Button title="+" onPress={() => handlePlus(basket.id)} />
+                {basket && (
+                  <View>
+                    <Text>{basket.count}</Text>
+                  </View>
+                )}
+                <Button title="-" onPress={() => handleMinus(basket.id)} />
+              </View>
+            );
+          })}
+        </View>
+        <Text>Загальна вартість: {totalPrice} UAH</Text>
+        <Button title="Замовити та сплатити" onPress={openOrder} />
+      </ScrollView>
+    </View>
+  );
+};
+
 const MainOfProduct = ({ route, navigation }) => {
   const url = 'http://localhost:8000';
   const [product, setProduct] = useState();
@@ -171,7 +300,7 @@ const MainOfProduct = ({ route, navigation }) => {
 
   const handleAddToBasket = async () => {
     try {
-      const apiKey = await AsyncStorage.getItem('api_key');
+      const apiKey = await AsyncStorage.getItem('apiKey');
       const userToken = await AsyncStorage.getItem('user_token');
 
       const response = await fetch(`${url}/addToBasket/${id}`, {
@@ -391,37 +520,27 @@ function Order({ navigation }){
   const url = 'http://localhost:8000'
 
   const [orderData, setOrderData] = useState('')
-  const [userOrder, setUserOrder] = useState('')
-  const allData= [orderData, userOrder]
+  const [userOrder, setUserOrder] = useState([])
+  const allData= {orderData}
+
+  // function postOrder() {
+  //     fetch('/api/', {
+  //     method: 'POST',
+  //     mode: 'no-cors',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify(allData)
+  //     }).catch(error => {
+  //       console.error(error);
+  //       console.log(error);
+  //     })
+  // }
 
   function postOrder() {
-      fetch('/nextJs/pages/api/send/', {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(allData)
-      }).catch(error => {
-        console.error(error);
-        console.log(error);
-      })
-  }
-  function getBasket(){
-    
-     fetch(`${url}/getProductFromBasket`, {
-      method:"GET",
-      headers: {
-        "Content-Type": "application/json",
-        // 'api-key': apiKey,
-        // 'user_token': userToken
-      }
-    }).then(data=>{
-      setUserOrder(data)
-    })
-  }
+      Handler(allData);
+    }
 
-    // getBasket();
 
   return (
     <View style={orderStyles.main}>

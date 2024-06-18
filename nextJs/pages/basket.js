@@ -63,8 +63,7 @@ const Basket = () => {
         "Content-Type": "application/json",
         'api-key': apiKey,
         'user_token': userToken
-      },
-      body: JSON.stringify({ id: id })
+      }
     }).then(Response => {
       return Response.json()
     }).then(data => {

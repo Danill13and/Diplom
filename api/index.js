@@ -3,9 +3,11 @@ const Product = require("./ProductDB")
 const Category = require("./categoryDB")
 const User = require("./userDB")
 const Basket = require("./basketDB")
+const Order = require("./orderDB")
 const { v4: uuidv4 } = require('uuid');
 const cors = require('cors')
 const { where } = require('sequelize')
+
 
 const app = express()
 app.use(express.urlencoded({ extended: true })); 
@@ -268,5 +270,99 @@ app.get("/getProductFromBasket", async (req, res) => {
         res.status(500).json({ error: "Внутренняя ошибка сервера" });
     }
 });
+
+app.post('/order', async (req, res) => {
+    const price = req.body.totalPrice;
+    const order_data = req.body.orderData
+    let redirect;
+
+    fetch("https://api.monobank.ua/api/merchant/invoice/create", {
+        method: "POST",
+        headers: {
+            'X-Token': 'uigkesLKd3ssnxM06KdCtEuf7qO7GEzXKoirkn2vtLIE',
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "amount": Number(`${price}00`),
+            "ccy": 840
+        })
+    })
+    .then((response) => {
+        // console.log(response);
+        return response.json();
+    })
+    .catch(error =>{
+        res.send(error)
+    })
+    .then(async (data) => {
+        const order = await Order.create({
+            inVoiceId: data.invoiceId,
+            success: false,
+            orderData: order_data
+        })
+        res.send(data)
+    });
+});
+
+app.get('/checkOrder', async (req, res) => {
+    let orders = await Order.findAll({
+        where:{
+            success: false
+        }
+    })
+    for (let order of orders){
+        let invoiceId = order.dataValues.inVoiceId
+        console.log(invoiceId)
+        fetch(`https://api.monobank.ua/api/merchant/invoice/status?invoiceId=${invoiceId}`,{
+            method: "GET",
+            headers: {
+                'X-Token': 'uigkesLKd3ssnxM06KdCtEuf7qO7GEzXKoirkn2vtLIE',
+                "Content-Type": "application/json"
+            }
+        }).then((response)=>{
+            return response.json()
+        }).then(async (data) =>{
+            console.log(222)
+            console.log(data)
+            if (data.status == 'success'){
+                console.log(111)
+                res.send(data)
+                order.update({success : true})
+            }
+        })
+    }
+})
+
+app.get('/getOrders', async (req, res) => {
+    try {
+        // Получение значения заголовка, проверка наличия и логирование
+        const invoiceId = req.headers["invoice-id"];
+        console.log(`Received invoiceId: ${invoiceId}`);
+
+        // Проверка наличия invoiceId в заголовках
+        if (!invoiceId) {
+            return res.status(400).send({ error: "Invoice ID is required" });
+        }
+
+        // Поиск заказа по invoiceId
+        const orders = await Order.findOne({
+            where: {
+                inVoiceId: invoiceId
+            }
+        });
+
+        // Проверка, был ли найден заказ
+        if (!orders) {
+            return res.status(404).send({ error: "No orders found for the provided invoice ID" });
+        }
+
+        // Отправка найденного заказа клиенту
+        res.status(200).send(orders);
+    } catch (error) {
+        console.error(`Error fetching orders: ${error.message}`);
+        res.status(500).send({ error: "An error occurred while fetching the orders" });
+    }
+});
+
 
 app.listen(8000)

@@ -57,34 +57,32 @@ export default function Main() {
   return (
     <main  className={styles.main}>
 
-      <div className={styles.header}>
-        <Image
-        src="/icons8-croissant-96 1.png"
-        width={50}
-        height={50}
-        alt="Picture of the author"/>
-        <a href="/">
-          <h1 className={styles.h1}>
-            СhatteRidée
-          </h1>
-        </a>
-        <div className={styles.box_in_header}>
-        <a href="/basket">
-          <p>
-            Кошик
-          </p>
-        </a>
-        <a href="/main">
-          <p>
-            Меню
-          </p>
-        </a>
-        <a onClick={openRegWin} className={styles.clickable}>Зареєструватись</a>
-        <Register isOpen={regWin} onClose={closeRegWin} />
-        <a onClick={openAuthModal} className={styles.clickable}>Авторизуватись</a>
-        <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} />
+<div className={styles.header}>
+          <div className={styles.divLogo}>
+            <Image
+              src="/icons8-croissant-96 1.png"
+              width={50}
+              height={50}
+              alt=""/>
+            <a className={styles.logoName} href="/">
+              СhatteRidée
+            </a>
+          </div>
+          <div className={styles.headerButtons}>
+            <Register isOpen={regWin} onClose={closeRegWin} />
+            <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} />
+            <a className={styles.a}  href="/basket">
+              Кошик
+            </a>
+            <a className={styles.a}  href="/Category">
+              Меню
+            </a>
+            
+            <a onClick={openRegWin} className={styles.a}>Зареєструватись</a>
+            <a onClick={openAuthModal} className={styles.a}>Авторизуватись</a>
+
+          </div>
         </div>
-      </div>
       <div className={styles.container}>
       {
         products.map((product, index)=>{
