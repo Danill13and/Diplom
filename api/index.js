@@ -279,7 +279,7 @@ app.post('/order', async (req, res) => {
     fetch("https://api.monobank.ua/api/merchant/invoice/create", {
         method: "POST",
         headers: {
-            'X-Token': 'uigkesLKd3ssnxM06KdCtEuf7qO7GEzXKoirkn2vtLIE',
+            'X-Token': '',
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -316,7 +316,7 @@ app.get('/checkOrder', async (req, res) => {
         fetch(`https://api.monobank.ua/api/merchant/invoice/status?invoiceId=${invoiceId}`,{
             method: "GET",
             headers: {
-                'X-Token': 'uigkesLKd3ssnxM06KdCtEuf7qO7GEzXKoirkn2vtLIE',
+                'X-Token': '',
                 "Content-Type": "application/json"
             }
         }).then((response)=>{
