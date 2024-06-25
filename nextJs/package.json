@@ -9,12 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+<<<<<<< HEAD
     "dotenv": "^16.4.5",
+=======
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
     "next": "14.2.3",
     "react": "^18",
     "react-cookie": "^7.1.4",
     "react-dom": "^18",
+<<<<<<< HEAD
     "react-native-dotenv": "^3.4.11",
+=======
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
     "react-string-format": "^1.2.0",
     "telegraf": "^4.16.3",
     "uuid": "^9.0.1"

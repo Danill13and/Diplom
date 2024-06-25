@@ -1,10 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
+<<<<<<< HEAD
 import { StyleSheet, Text, View, ScrollView, TextInput, Image, TouchableOpacity, Button, Modal, Linking } from 'react-native';
 import { Link, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
 import { Router } from 'react-router';
+=======
+import { StyleSheet, Text, View, ScrollView, TextInput, Image, TouchableOpacity, Button, Modal } from 'react-native';
+import { Link, NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useEffect } from 'react'
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
 
 const Stack = createNativeStackNavigator()
 export default function App() {
@@ -35,11 +43,19 @@ function Register({ navigation }){
   const [lastName, setLastName] = useState('')
 
 
+<<<<<<< HEAD
   const regData= {"name": name, "password": password, "lastName":lastName, "phoneNumber":phoneNumber, "rePassword":rePassword}
 
 
   function regUser() {
     fetch(`https://chateerideeapi.onrender.com/createUsers`,{
+=======
+  const regData= {"name": name, "password": password, "lastName":lastName, "phoneNumber":phoneNumber}
+
+
+  function regUser() {
+    fetch(`${url}/createUsers`,{
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
       method:"POST",
       body: JSON.stringify(regData),
       headers: {
@@ -50,12 +66,17 @@ function Register({ navigation }){
       return Response.json()
     })
       .then(data=>{
+<<<<<<< HEAD
         if(data.error){
           setError(data.error)
         }else{
           AsyncStorage.setItem('apiKey', data.apikey);///Set any thing from AsyncStorage
           navigation.navigate('main');
         }
+=======
+        AsyncStorage.setItem('apiKey', data.apikey);
+        navigation.navigate('main');
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
       })
 
   }
@@ -74,7 +95,10 @@ function Register({ navigation }){
         <Text>Зареєструватись</Text>
         </View>
       </TouchableOpacity>
+<<<<<<< HEAD
       <Text>{error}</Text>
+=======
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
     </View>
     </View>
   );
@@ -162,7 +186,11 @@ const Basket = ({ navigation }) => {
   const getTokens = async () => {
     try {
       const apiKey = await AsyncStorage.getItem('apiKey');
+<<<<<<< HEAD
       const userToken = await AsyncStorage.getItem('user_token');///Get any thing from AsyncStorage
+=======
+      const userToken = await AsyncStorage.getItem('user_token');
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
       return { apiKey, userToken };
     } catch (error) {
       console.error('Error fetching tokens from AsyncStorage:', error);
@@ -176,7 +204,11 @@ const Basket = ({ navigation }) => {
   const handleGet = async () => {
     try {
       const { apiKey, userToken } = await getTokens();
+<<<<<<< HEAD
       const response = await fetch(`https://chateerideeapi.onrender.com/getProductFromBasket`, {
+=======
+      const response = await fetch(`http://localhost:8000/getProductFromBasket`, {
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -196,7 +228,11 @@ const Basket = ({ navigation }) => {
   const handlePlus = async (id) => {
     try {
       const { apiKey, userToken } = await getTokens();
+<<<<<<< HEAD
       await fetch(`https://chateerideeapi.onrender.com/productPlus`, {
+=======
+      await fetch(`http://localhost:8000/productPlus`, {
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -214,7 +250,11 @@ const Basket = ({ navigation }) => {
   const handleMinus = async (id) => {
     try {
       const { apiKey, userToken } = await getTokens();
+<<<<<<< HEAD
       await fetch(`https://chateerideeapi.onrender.com/productMinus`, {
+=======
+      await fetch(`http://localhost:8000/productMinus`, {
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -268,7 +308,11 @@ const Basket = ({ navigation }) => {
           })}
         </View>
         <Text>Загальна вартість: {totalPrice} UAH</Text>
+<<<<<<< HEAD
         <Button title="Замовити та сплатити" onPress={() => navigation.navigate('order')} />
+=======
+        <Button title="Замовити та сплатити" onPress={openOrder} />
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
       </ScrollView>
     </View>
   );
@@ -290,7 +334,11 @@ const MainOfProduct = ({ route, navigation }) => {
   const handleGet = async () => {
     console.log(id);
     try {
+<<<<<<< HEAD
       const response = await fetch(`https://chateerideeapi.onrender.com/mainProduct/${id}`, { method: 'GET' });
+=======
+      const response = await fetch(`${url}/mainProduct/${id}`, { method: 'GET' });
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
       const data = await response.json();
       console.log(data);
       setImage(data.image);
@@ -309,7 +357,11 @@ const MainOfProduct = ({ route, navigation }) => {
       const apiKey = await AsyncStorage.getItem('apiKey');
       const userToken = await AsyncStorage.getItem('user_token');
 
+<<<<<<< HEAD
       const response = await fetch(`https://chateerideeapi.onrender.com/addToBasket/${id}`, {
+=======
+      const response = await fetch(`${url}/addToBasket/${id}`, {
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -422,7 +474,11 @@ function Category({ navigation }){
   const [categorys, setCategory] = useState([])
 
   const allCategory = async () =>{
+<<<<<<< HEAD
     await fetch(`https://chateerideeapi.onrender.com/AllCategory`,{
+=======
+    await fetch(`http://localhost:8000/AllCategory`,{
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
       method: 'GET',
       headers: { 
         "Content-Type": "application/json",
@@ -484,7 +540,11 @@ function Menu({ route, navigation }){
   const id = route.params.category.id
 
   const allProduct = async () =>{
+<<<<<<< HEAD
     await fetch(`https://chateerideeapi.onrender.com/getProduct/${id}`,{
+=======
+    await fetch(`http://localhost:8000/getProduct/${id}`,{
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
       method: 'GET',
       headers: { 
         "Content-Type": "application/json",
@@ -508,6 +568,7 @@ function Menu({ route, navigation }){
     <View style={menuStyles.container}>
       {
       route.params &&(
+<<<<<<< HEAD
         <View style={menuStyles.main} >
           {products.map((product) => (
           <TouchableOpacity style={menuStyles.box} onPress={() => {navigation.navigate('mainOfProduct', {product:product})}}>
@@ -519,6 +580,14 @@ function Menu({ route, navigation }){
               <Text>Докладніше</Text>
             </TouchableOpacity>
           </View >
+=======
+        <View>
+          {products.map((product) => (
+        <TouchableOpacity onPress={() => {navigation.navigate('mainOfProduct', {product:product})}}>
+          <Image source={{ uri: `${product.image}`}} style={{ width: 100, height: 100 }} />
+          <Text style={categoryStyles.productText}>{product.name}</Text>
+          <Text style={categoryStyles.productText}>{product.price}</Text>
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
         </TouchableOpacity>
       ))}
         </View>
@@ -528,6 +597,7 @@ function Menu({ route, navigation }){
 }
 
 function Order({ navigation }){
+<<<<<<< HEAD
 
   const openLink = (url) => {
     Linking.openURL(url).catch((err) =>
@@ -652,6 +722,39 @@ function Order({ navigation }){
       <Text style={orderStyles.h}>Замовленя</Text>
       <TextInput style={orderStyles.inp} name = "adress" value={orderData} onChange={(e) => {setOrderData(e.target.value)}}  placeholder='Адресса доставки'/>
       <TouchableOpacity style={registerStyles.button} onPress={handleSubmit} >
+=======
+  const url = 'http://localhost:8000'
+
+  const [orderData, setOrderData] = useState('')
+  const [userOrder, setUserOrder] = useState([])
+  const allData= {orderData}
+
+  // function postOrder() {
+  //     fetch('/api/', {
+  //     method: 'POST',
+  //     mode: 'no-cors',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify(allData)
+  //     }).catch(error => {
+  //       console.error(error);
+  //       console.log(error);
+  //     })
+  // }
+
+  function postOrder() {
+      Handler(allData);
+    }
+
+
+  return (
+    <View style={orderStyles.main}>
+    <View style={orderStyles.container}>
+      <Text style={orderStyles.h}>Замовленя</Text>
+      <TextInput style={orderStyles.inp}  value={orderData} onChange={(e) => {setOrderData(e.target.value)}}  placeholder='Адресса доставки'/>
+      <TouchableOpacity style={registerStyles.button} onPress={postOrder} >
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
         <View>
         <Text style={orderStyles.h}>Замовити</Text>
         </View>
@@ -674,7 +777,10 @@ const registerStyles = StyleSheet.create({
     alignItems: 'center',
     gap: 20 ,
     justifyContent: 'center',
+<<<<<<< HEAD
     
+=======
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
   },
   container:{
 
@@ -682,8 +788,13 @@ const registerStyles = StyleSheet.create({
     borderRadius:10,
     alignItems: 'center',
     gap: 20 ,
+<<<<<<< HEAD
     width:"70%",
     minHeight:"70%",
+=======
+    width:"30%",
+    minHeight:"80%",
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
     justifyContent: 'center',
   },
   inp:{
@@ -692,7 +803,11 @@ const registerStyles = StyleSheet.create({
     borderRadius:10,
     borderBlockColor:"black",
     height:"8%",
+<<<<<<< HEAD
     backgroundColor:'#E0E0E0',
+=======
+    backgroundColor:'#BDBDBD',
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
     fontSize:20
   }
   , button: {
@@ -810,6 +925,7 @@ const menuStyles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+<<<<<<< HEAD
     justifyContent: 'center',
   },
   box:{
@@ -826,10 +942,34 @@ const menuStyles = StyleSheet.create({
   text: {
     fontSize:20,
     color:"white",
+=======
+    gap: 20,
+    justifyContent: 'center',
+  },
+  box:{
+    flex: 1,
+    width: '100%',
+    height: '30px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 20,
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  input: {
+    backgroundColor: '#F2F2F2', 
+    borderWidth: 1, 
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+    width: '70%',
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
     alignSelf: 'center'
   },
   buttonContainer: {
     alignItems: 'center',
+<<<<<<< HEAD
     color:"black",
     backgroundColor:"#E6FF9E",
     borderRadius: 5,
@@ -844,4 +984,7 @@ const menuStyles = StyleSheet.create({
     gap:30
   },
 
+=======
+  },
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
 })

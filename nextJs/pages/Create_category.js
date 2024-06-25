@@ -3,11 +3,17 @@
 import { useState } from 'react';
 import styles from '../styles/create_category.module.css';
 import Image from "next/image";
+<<<<<<< HEAD
 require('dotenv').config()
 
 export default function Auth() {
 
   const url = process.env.url
+=======
+
+export default function Auth() {
+  
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
   const [name, setname] = useState("")
 
   const handleChange = (e) => {
@@ -17,7 +23,11 @@ export default function Auth() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+<<<<<<< HEAD
     fetch(`https://chateerideeapi.onrender.com/createCategory`, {
+=======
+    fetch("http://localhost:8000/createCategory", {
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
       method: "POST",
       body: JSON.stringify({ name }),
       headers: {

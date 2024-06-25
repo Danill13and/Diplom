@@ -1,5 +1,8 @@
 const express = require('express')
+<<<<<<< HEAD
 require('dotenv').config()
+=======
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
 const Product = require("./ProductDB")
 const Category = require("./categoryDB")
 const User = require("./userDB")
@@ -8,15 +11,21 @@ const Order = require("./orderDB")
 const { v4: uuidv4 } = require('uuid');
 const cors = require('cors')
 const { where } = require('sequelize')
+<<<<<<< HEAD
 const { Telegraf } =require("telegraf")
 
 const MonoBankToken = process.env.MonoBankToken
 const TelegramToken = process.env.TelegramToken
+=======
+
+
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
 const app = express()
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.json())
 app.use(cors())
 
+<<<<<<< HEAD
 const bot = new Telegraf(TelegramToken)
 
 
@@ -28,6 +37,10 @@ function checkAvailability(arr, val) {
   return arr.some(function (arrVal) {
     return val === arrVal;
   });
+=======
+function isValid(username) {
+    return /^[a-zA-Z]+$/.test(username)
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
 }
 
 app.get('/AllCategory', async (req, res) => {
@@ -57,12 +70,20 @@ app.post('/userLogin', async (req, res) => {
 
 app.get('/getProduct/:id', async (req, res) => {
     const id  = req.params.id;
+<<<<<<< HEAD
+=======
+    console.log(id)
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
     const product = await Product.findAll({where: {category: id}});
     res.send(product);
 });
 
 app.get('/mainProduct/:id', async(req, res)=>{
     const id = req.params.id; 
+<<<<<<< HEAD
+=======
+    console.log(id);
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
     const prod = await Product.findOne({where: {id: id}})
     res.send(prod)
 })
@@ -72,18 +93,28 @@ app.post('/createUsers', async(req, res)=>{
     if (req.body.name === undefined || req.body.name === " " || req.body.name === ""){
         return res.json({error: "Name is required"})
     } 
+<<<<<<< HEAD
     else if(isValidName(req.body.name) === false){
+=======
+    else if(isValid(req.body.name) === false){
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
         return res.json({error: "Name is invalid"})
     }
     else if (req.body.lastName === undefined || req.body.lastName === " " || req.body.lastName === ""){
         return res.json({error: "Surname is required"})
     }
+<<<<<<< HEAD
     else if(isValidName(req.body.lastName) === false){
         return res.json({error: "SurName is invalid"})
+=======
+    else if(isValid(req.body.lastName) === false){
+        return res.json({error: "Name is invalid"})
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
     }
     else if (req.body.password === undefined || req.body.password === " " || req.body.password === ""){
         return res.json({error: "Password is required"})
     }
+<<<<<<< HEAD
     else if (req.body.password.length < 8){
         return res.json({error: "Password is smaller than 8 characters"})
     }
@@ -97,6 +128,12 @@ app.post('/createUsers', async(req, res)=>{
         return res.json({error: "Phone number is invalid"})
     }
     const newUser = await User.create({name : `${req.body.name}`, surName: `${req.body.lastName}`, password : `${req.body.password}`, apikey : apikey, phoneNumber : `${req.body.phoneNumber}`})
+=======
+    // else if (len(req.body.password) < 8){
+    //     return res.json({error: "Password is smaller than 8 characters"})
+    // }
+    const newUser = await User.create({name : `${req.body.name}`, surName: `${req.body.lastName}`, password : `${req.body.password}`, apikey : apikey})
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
     res.send(newUser)
 })
 
@@ -191,6 +228,10 @@ app.post("/productPlus", async (req, res) => {
     if (apiKey && apiKey !== "undefined") {
         const UsersID = await User.findOne({apikey: apiKey})
         const productPlus = await Basket.findOne({where: {id: product}})
+<<<<<<< HEAD
+=======
+        console.log(productPlus)
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
         if(productPlus.count <= 9){
             console.log(productPlus.count)
             productPlus.update({count: productPlus.count + 1})
@@ -202,6 +243,10 @@ app.post("/productPlus", async (req, res) => {
         const userToken = req.headers["user_token"]
         const productPlus = await Basket.findOne({where: {user_token: userToken }})
         if(productPlus.count <= 9){
+<<<<<<< HEAD
+=======
+            console.log(productPlus.count)
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
             productPlus.update({count: productPlus.count + 1})
             res.send(productPlus)
         }else{
@@ -217,6 +262,10 @@ app.post("/productMinus", async (req, res) => {
         const UsersID = await User.findOne({apikey: apiKey})
         const productMinus = await Basket.findOne({where: {id: product}})
         if(productMinus.count > 1){
+<<<<<<< HEAD
+=======
+            console.log(productMinus.count)
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
             productMinus.update({count: productMinus.count - 1})
             res.send(productMinus)
         }else{
@@ -226,6 +275,10 @@ app.post("/productMinus", async (req, res) => {
         const userToken = req.headers["user_token"]
         const productMinus = await Basket.findOne({where: {user_token: userToken }})
         if(productMinus.count > 1){
+<<<<<<< HEAD
+=======
+            console.log(productMinus.count)
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
             productMinus.update({count: productMinus.count - 1})
             res.send(productMinus)
         }else{
@@ -289,6 +342,7 @@ app.get("/getProductFromBasket", async (req, res) => {
 app.post('/order', async (req, res) => {
     const price = req.body.totalPrice;
     const order_data = req.body.orderData
+<<<<<<< HEAD
     const apiKey = req.headers["api-key"];
     let products = [];
     let basketItems
@@ -448,11 +502,75 @@ app.get('/checkOrder', async (req, res) => {
         res.status(500).json({ error: "An error occurred while checking orders" });
     }
 });
+=======
+    let redirect;
+
+    fetch("https://api.monobank.ua/api/merchant/invoice/create", {
+        method: "POST",
+        headers: {
+            'X-Token': '',
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "amount": Number(`${price}00`),
+            "ccy": 840
+        })
+    })
+    .then((response) => {
+        // console.log(response);
+        return response.json();
+    })
+    .catch(error =>{
+        res.send(error)
+    })
+    .then(async (data) => {
+        const order = await Order.create({
+            inVoiceId: data.invoiceId,
+            success: false,
+            orderData: order_data
+        })
+        res.send(data)
+    });
+});
+
+app.get('/checkOrder', async (req, res) => {
+    let orders = await Order.findAll({
+        where:{
+            success: false
+        }
+    })
+    for (let order of orders){
+        let invoiceId = order.dataValues.inVoiceId
+        console.log(invoiceId)
+        fetch(`https://api.monobank.ua/api/merchant/invoice/status?invoiceId=${invoiceId}`,{
+            method: "GET",
+            headers: {
+                'X-Token': '',
+                "Content-Type": "application/json"
+            }
+        }).then((response)=>{
+            return response.json()
+        }).then(async (data) =>{
+            console.log(222)
+            console.log(data)
+            if (data.status == 'success'){
+                console.log(111)
+                res.send(data)
+                order.update({success : true})
+            }
+        })
+    }
+})
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
 
 app.get('/getOrders', async (req, res) => {
     try {
         // Получение значения заголовка, проверка наличия и логирование
         const invoiceId = req.headers["invoice-id"];
+<<<<<<< HEAD
+=======
+        console.log(`Received invoiceId: ${invoiceId}`);
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
 
         // Проверка наличия invoiceId в заголовках
         if (!invoiceId) {
@@ -479,4 +597,9 @@ app.get('/getOrders', async (req, res) => {
     }
 });
 
+<<<<<<< HEAD
 app.listen(8000)
+=======
+
+app.listen(8000)
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9

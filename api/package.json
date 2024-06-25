@@ -1,11 +1,17 @@
 {
   "dependencies": {
     "cors": "^2.8.5",
+<<<<<<< HEAD
     "dotenv": "^16.4.5",
     "env": "^0.0.2",
     "express": "^4.19.2",
     "pg": "^8.11.5",
     "sequelize": "^6.37.3",
     "telegraf": "^4.16.3"
+=======
+    "express": "^4.19.2",
+    "pg": "^8.11.5",
+    "sequelize": "^6.37.3"
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
   }
 }

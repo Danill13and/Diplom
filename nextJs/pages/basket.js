@@ -5,7 +5,10 @@ import { Order } from "./Order";
 import { useCookies } from 'react-cookie';
 import { AuthModal } from "../pages/Auth";
 import { Register } from "../pages/Reg";
+<<<<<<< HEAD
 require('dotenv').config()
+=======
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
 
 const Basket = () => {
   const [orderWin, setOrderWin] = useState(false);
@@ -17,7 +20,10 @@ const Basket = () => {
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
   const [regWin, setRegWin] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
+<<<<<<< HEAD
   const url = process.env.url
+=======
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
 
   const openOrder = () => {
     setOrderWin(true);
@@ -42,7 +48,11 @@ const Basket = () => {
   };
 
   const handleGet = () => {
+<<<<<<< HEAD
     fetch(`https://chateerideeapi.onrender.com/getProductFromBasket`, {
+=======
+    fetch(`http://localhost:8000/getProductFromBasket`, {
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -59,14 +69,22 @@ const Basket = () => {
   };
 
   const handlePlus = (id) => {
+<<<<<<< HEAD
     fetch(`https://chateerideeapi.onrender.com/productPlus`, {
+=======
+    fetch(`http://localhost:8000/productPlus`, {
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         'api-key': apiKey,
         'user_token': userToken
+<<<<<<< HEAD
       },
       body: JSON.stringify({ id: id })
+=======
+      }
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
     }).then(Response => {
       return Response.json()
     }).then(data => {
@@ -75,7 +93,11 @@ const Basket = () => {
   };
 
   const handleMinus = (id) => {
+<<<<<<< HEAD
     fetch(`https://chateerideeapi.onrender.com/productMinus`, {
+=======
+    fetch(`http://localhost:8000/productMinus`, {
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -99,6 +121,7 @@ const Basket = () => {
     setTotalPrice(total);
   };
 
+<<<<<<< HEAD
   const checkOrders = () => {
     fetch(`https://chateerideeapi.onrender.com/checkOrder`, {
       method: "GET",
@@ -118,6 +141,10 @@ const Basket = () => {
   useEffect(() => {
     handleGet();
     checkOrders();
+=======
+  useEffect(() => {
+    handleGet();
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
   }, []);
 
   if (!cookies.apiKey) {
@@ -177,7 +204,11 @@ const Basket = () => {
         </div>
       </>
     );
+<<<<<<< HEAD
   } else if (cookies.apiKey === "071864cc-2d85-43f3-883c-55a05e36b820") {
+=======
+  } else if (cookies.apiKey === "c478890e-15c7-41c2-a821-c2c65210e96e") {
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
     return (
       <>
         <Order isOpen={orderWin} onClose={closeOrder} />
@@ -244,7 +275,11 @@ const Basket = () => {
           <nav className={styles.nav}>
             <a href="/basket">Кошик</a>
             <a href="/Category">Меню</a>
+<<<<<<< HEAD
             <a className={styles.a}>Профіль</a>
+=======
+            <a className={styles.a} href="/Create_category">Профіль</a>
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
           </nav>
         </header>
 

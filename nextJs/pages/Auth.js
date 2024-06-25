@@ -3,10 +3,16 @@
 import { useState, useEffect } from 'react';
 import styles from '../styles/auth.module.css';
 import { useCookies } from 'react-cookie'
+<<<<<<< HEAD
 require('dotenv').config()
 
 export function AuthModal({ isOpen, onClose }) {
   const url = process.env.url
+=======
+
+export function AuthModal({ isOpen, onClose }) {
+  const url = 'http://localhost:8000';
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -34,7 +40,11 @@ export function AuthModal({ isOpen, onClose }) {
     };
 
     try {
+<<<<<<< HEAD
       const response = await fetch(`https://chateerideeapi.onrender.com/userLogin`, {
+=======
+      const response = await fetch('http://localhost:8000/userLogin', {
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

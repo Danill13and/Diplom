@@ -7,10 +7,16 @@ import { useRouter } from "next/router";
 import { useCookies } from 'react-cookie';
 import {AuthModal} from "../../pages/Auth"
 import {Register} from "../../pages/Reg"
+<<<<<<< HEAD
 require('dotenv').config()
 
 const MainProduct = () => {
   const url = process.env.url;
+=======
+
+const MainProduct = () => {
+  const url = 'http://localhost:8000';
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
   const [product, setProduct] = useState();
   const [image, setImage] = useState(' ');
   const [name, setName] = useState(' ');
@@ -44,7 +50,11 @@ const MainProduct = () => {
 
   const handleGet = () => {
     console.log(id);
+<<<<<<< HEAD
     fetch(`https://chateerideeapi.onrender.com/mainProduct/${id}`, {
+=======
+    fetch(`${url}/mainProduct/${id}`, {
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
       method: "GET",
     })
     .then(response => response.json())
@@ -61,7 +71,11 @@ const MainProduct = () => {
 
   const handleAddToBasket = () => {
 
+<<<<<<< HEAD
     fetch(`https://chateerideeapi.onrender.com/addToBasket/${id}`, {
+=======
+    fetch(`${url}/addToBasket/${id}`, {
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -168,7 +182,11 @@ const MainProduct = () => {
       </>
     );
   }
+<<<<<<< HEAD
   else if (cookies.apiKey == "071864cc-2d85-43f3-883c-55a05e36b820"){
+=======
+  else if (cookies.apiKey == "c478890e-15c7-41c2-a821-c2c65210e96e"){
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
     return (
       <>
         <header className={styles.header}>

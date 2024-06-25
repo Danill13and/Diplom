@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .main {
   display: flex;
   flex-direction: column;
@@ -28,6 +29,41 @@
 .hr_line{
   border: 2px #131313 solid;
   width: 30%;
+=======
+.main{
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    height: 100vh;
+    background-image: url('../public/kafe.jpg');
+}
+.h1 {
+    text-align: center;
+  }
+.header {
+  background-color: black;
+  color: white;
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+}
+.box_in_header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 50%;
+  gap: 25px;
+  padding-left: 1000px;
+}
+.hr_line{
+  border: 1px solid;
+  width: 20%;
+  margin: 10px;
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
 }
 .conteiner{
   display: flex;
@@ -35,6 +71,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
+<<<<<<< HEAD
   height: 100vh;
   background-image: url('../public/kafe.jpg');
   background-size: cover;
@@ -64,10 +101,18 @@
 .underWellcome{
   font-size: 24px;
   color: #131313;
+=======
+  height: 100%;
+}
+.p{
+  text-align: center;
+  margin-bottom: 20px;
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
 }
 .a{
   text-decoration:none;
   color: white;
+<<<<<<< HEAD
   cursor: pointer;
 }
 .divLogo{
@@ -93,4 +138,13 @@
   gap: 10px;
   box-sizing: border-box;
   
+=======
+}
+.div_for_gap{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
 }

@@ -84,7 +84,11 @@ export default function Home() {
       </main>
     );
   }
+<<<<<<< HEAD
   else if (cookies.apiKey == "071864cc-2d85-43f3-883c-55a05e36b820"){
+=======
+  else if (cookies.apiKey == "c478890e-15c7-41c2-a821-c2c65210e96e"){
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
     return (
       <main className={styles.main}>
         <div className={styles.header}>

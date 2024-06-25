@@ -8,10 +8,16 @@ import {AuthModal} from "../pages/Auth"
 import {Register} from "../pages/Reg"
 import { format } from 'react-string-format';
 import { useCookies } from 'react-cookie'
+<<<<<<< HEAD
 require('dotenv').config()
 
 export default function Main() {
   const url = process.env.url
+=======
+export default function Main() {
+  const url = 'http://localhost:8000'
+  const urls = "http://localhost:3000"
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
 
   const [products, setProducts] = useState([]);
 
@@ -38,7 +44,11 @@ export default function Main() {
 
   const handleGet = (e) => {
     console.log(id)
+<<<<<<< HEAD
     fetch(`https://chateerideeapi.onrender.com/getProduct/${id}`, {
+=======
+    fetch(`${url}/getProduct/${id}`, {
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
       method:"GET",
     }) .then(Response =>{
       return Response.json()
@@ -64,7 +74,11 @@ export default function Main() {
               src="/icons8-croissant-96 1.png"
               width={50}
               height={50}
+<<<<<<< HEAD
               alt="aaa"/>
+=======
+              alt=""/>
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
             <a className={styles.logoName} href="/">
               СhatteRidée
             </a>
@@ -112,7 +126,11 @@ export default function Main() {
     </main>
     );
   }
+<<<<<<< HEAD
   else if (cookies.apiKey == "071864cc-2d85-43f3-883c-55a05e36b820"){
+=======
+  else if (cookies.apiKey == "c478890e-15c7-41c2-a821-c2c65210e96e"){
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
     return (
       <main  className={styles.main}>
   

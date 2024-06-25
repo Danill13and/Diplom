@@ -4,10 +4,16 @@ import React, {useEffect, useState} from "react";
 import ReactDOM from "react-dom";
 import styles from '../styles/reg.module.css';
 import { useCookies } from 'react-cookie'
+<<<<<<< HEAD
 require('dotenv').config()
 
 export function Register({ isOpen, onClose }){
   const url = process.env.url
+=======
+
+export function Register({ isOpen, onClose }){
+  const url = 'http://localhost:8000'
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
   
   const [regData, setRegData] = useState({
     name: '',
@@ -41,7 +47,11 @@ export function Register({ isOpen, onClose }){
 }
 
   const handleSubmit = (e) => {
+<<<<<<< HEAD
     fetch(`https://chateerideeapi.onrender.com/createUsers`,{
+=======
+    fetch(`${url}/createUsers`,{
+>>>>>>> 6c68cbffefc20cd82f8c9a5f20d7f821540180a9
       method:"POST",
       body: JSON.stringify(regData),
       headers: {
