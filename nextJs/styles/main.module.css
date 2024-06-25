@@ -1,0 +1,116 @@
+.main{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    background-image: url('../public/Frame14.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; 
+    width: 100vw;
+    height: 100vh;
+    margin: 0%;
+}
+.header{
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #131313;
+    color: white;
+}
+.box_in_header {
+    text-decoration: none;
+    color: #E0E0E0;
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 50%;
+    gap: 25px;
+    padding-left: 1000px;
+  }
+.container{
+    margin: 1%;
+    gap: 2%;
+    color: #E0E0E0;
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    min-width: 100vw;
+    min-height: 100vh;
+  }
+
+.a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: black;
+   text-decoration: none;
+}
+
+.prods{
+    border-radius: 10px 0px 10px 0px;
+    gap: 3%;
+    height: 290px;
+    border: black solid 2px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fffef5;
+    min-width: 220px;
+    width: 10%;
+    align-items: center;
+    justify-content: center;
+}
+.prod{
+    gap: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.separator {
+    width: 100%;
+    border-top: 2px solid black;
+    margin: 0;
+    margin-bottom: 10px;
+  }
+
+.infoT{
+    margin: 0%;
+    font-size:20px;
+    color: #8f8f8f;
+}
+.info{
+    gap: 10px;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    width: 95%;
+    justify-content: center;
+}
+.name{
+    display: flex;
+    margin: 0%;
+    font-size:25px;
+
+
+}
+.button {
+    font-size: 16px;
+    background-color: #E6FF9E;
+    border: 1px solid #000000;
+    border-radius: 5px 0px 5px 0px;
+    cursor: pointer;
+    min-height: 10%;
+    justify-content: center;
+    align-items: center;
+  }
+  
+
