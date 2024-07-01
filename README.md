@@ -41,7 +41,7 @@
 ## Посилання:
 - [ChateeRideeApi на GitHub](https://github.com/Danill13and/ChateeRideeApi)
 - [Офіційний сайт ChateeRidee](https://chateerideenext.onrender.com)
-- [ChateeRideeNext не GitHub](https://chateerideenext.onrender.com)
+- [ChateeRideeNext не GitHub](https://github.com/Danill13and/ChateeRideeNext)
 
 ## Встановлення
 
