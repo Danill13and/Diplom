@@ -18,39 +18,113 @@
 
 ## Функціонал
 
-- **Авторизація**: можливість входу в систему за допомогою облікового запису.
-- **Реєстрація**: створення нового облікового запису для нових користувачів.
-- **Сторінка продукту**: детальний опис та фото продукту.
-- **Категорії**: сортування продуктів за категоріями.
-- **Меню**: перегляд усіх доступних страв та напоїв.
-- **Корзина**: управління продуктами, що додані до корзини.
-- **Замовлення**: оформлення та перегляд статусу замовлення.
+- Авторизація: можливість входу в систему за допомогою облікового запису.
+- Реєстрація: створення нового облікового запису для нових користувачів.
+- Сторінка продукту: детальний опис та фото продукту.
+- Категорії: сортування продуктів за категоріями.
+- Меню: перегляд усіх доступних страв та напоїв.
+- Корзина: управління продуктами, що додані до корзини.
+- Замовлення: оформлення та перегляд статусу замовлення.
 
-## Використані технології
+## Дякуємо цим технологіям!
+| Технології      | Опис                                                                                     |
+|-----------------|--------------------------------------------------------------------------------------------|
+| ![JS]      | **JavaScript** — Універсальна мова програмування, що використовується головним чином для веб-розробки, створення інтерактивного та динамічного контенту. |
+| ![React]   | **React** — JavaScript бібліотека для створення користувацьких інтерфейсів, що зазвичай використовується для односторінкових додатків.                                                               |
+| ![Figma]    | **Figma** — Спільний веб-інструмент для дизайну, що використовується для UI/UX дизайну, прототипування та систем дизайну.                                                                                     |
+| ![Android]      | **Android Studio** — Офіційне інтегроване середовище розробки (IDE) для розробки додатків на Android, яке надає інструменти для кодування, тестування та налагодження додатків на Android.                              |
+| ![NPM]   | **NPM** — Менеджер пакетів для JavaScript, що дозволяє розробникам встановлювати, ділитися та керувати залежностями в їхніх проектах.                                                     |
+| ![GITHUB]    | **GitHub** — Веб-платформа, що використовує Git для контролю версій та надає хостинг для розробки програмного забезпечення і співпраці.                                                                                     |
+| ![GIT]      | **Git** — Розподілена система контролю версій, яка допомагає відслідковувати зміни у вихідному коді під час розробки програмного забезпечення.                |
 
-- **Frontend:**
-  - CSS
-  - JavaScript
-  - React.js
-
-- **Backend:**
-  - Node.js
-
-- **База даних:**
-  - PostgreSQL
-
-## Розробники:
-- [Андросов Данило (Тімлід)](https://github.com/Danill13and) 
-- [Ярослав Марченко](https://github.com/Marchenko-YAroslav)
-- [Мулько Артем](https://github.com/ArtemMulko)
 
 ## Посилання:
 - [ChateeRideeApi на GitHub](https://github.com/Danill13and/ChateeRideeApi)
 - [Офіційний сайт ChateeRidee](https://www.chateeridee.com)
 
-## Зображення
+
+## Встановлення
+
+1. Клонуйте репозиторій:
+```bash
+ git clone https://github.com/Danill13and/Diplom
+
+2.Перейдіть у папку проекту
+
+3. Встановіть модулі для роботи Next.js:
+  cd nextJs
+  npm install
+
+4. Запустіть Next.js:
+  npm run
+
+5. Встановіть модулі для роботи Expo:
+
+6. Запустіть Expo:
 
 ## Приклад коду
+"use client";
+
+import { useState, useEffect } from 'react';
+import styles from '../styles/auth.module.css';
+import { useCookies } from 'react-cookie'
+require('dotenv').config()
+
+export function AuthModal({ isOpen, onClose }) {
+  const url = process.env.url
+
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [animate, setAnimate] = useState(false);
+  const [cookies, setCookies] = useCookies(['apiKey'])
+
+  useEffect(() => {
+    if (isOpen) {
+      setAnimate(true);
+    }
+  }, [isOpen]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError('');
+    setSuccess('');
+
+    const userData = {
+      name: firstName,
+      surName: lastName,
+      password
+    };
+
+    try {
+      const response = await fetch(`https://chateerideeapi.onrender.com/userLogin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error);
+      }
+
+      const user = await response.json();
+      setSuccess(`Welcome, ${user.name}!`);
+      setCookies("apiKey", user.apikey)
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const closeModal = () => {
+    setAnimate(false);
+    setTimeout(onClose, 300);
+    location.reload()
+  };
 
 ### Фрагмент коду для отримання даних про замовлення
 
@@ -76,8 +150,8 @@ app.get('/checkOrder', async (req, res) => {
         });
         users.push(user);
         if(user){
-            baskets = await Basket.findAll({ where: { userID: `${userId}` } });
-            console.log(`user: ${await Basket.findAll({ where: { userID: `${userId}` } })}`);
+            baskets = await Basket.findAll({ where: { userID: ${userId} } });
+            console.log(user: ${await Basket.findAll({ where: { userID: `${userId} } })}`);
         } else {
             const userToken = req.headers["user_token"];
             baskets = await Basket.findAll({ where: { user_token: userToken } });
@@ -110,3 +184,10 @@ app.get('/checkOrder', async (req, res) => {
         });
     }
 });
+
+
+
+## Розробники:
+- [Андросов Данило](https://github.com/Danill13and) 
+- [Ярослав Марченко](https://github.com/Marchenko-YAroslav)
+- [Мулько Артем](https://github.com/ArtemMulko)
