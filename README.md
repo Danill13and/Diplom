@@ -40,8 +40,8 @@
 
 ## Посилання:
 - [ChateeRideeApi на GitHub](https://github.com/Danill13and/ChateeRideeApi)
-- [Офіційний сайт ChateeRidee](https://www.chateeridee.com)
-
+- [Офіційний сайт ChateeRidee](https://chateerideenext.onrender.com)
+- [ChateeRideeNext не GitHub](https://chateerideenext.onrender.com)
 
 ## Встановлення
 
