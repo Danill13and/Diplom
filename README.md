@@ -42,6 +42,8 @@
 - [ChateeRideeApi на GitHub](https://github.com/Danill13and/ChateeRideeApi)
 - [Офіційний сайт ChateeRidee](https://chateerideenext.onrender.com)
 - [ChateeRideeNext не GitHub](https://github.com/Danill13and/ChateeRideeNext)
+- [FigJam](https://www.figma.com/board/DZvY6S7bTmC2VGfLkGLbnq/Untitled?node-id=0-1&t=BGfJ7JayoCYhX5MB-0)
+- [Figma](https://www.figma.com/design/KdVGG744zLgVvt9n2zp7fQ/Untitled?node-id=0-1&t=udfoOUD8fnrdfE3m-0)
 
 ## Встановлення
 
